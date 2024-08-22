@@ -4,25 +4,43 @@ const path = require('path');
 
 const router = express.Router();
 
+// Function to get dataset info from file
+function getDatasetInfo(datasetName) {
+  const infoFilePath = path.join(__dirname, '../uploads/datasets', datasetName, 'info.json');
+  if (fs.existsSync(infoFilePath)) {
+    const data = fs.readFileSync(infoFilePath, 'utf8');
+    return JSON.parse(data);
+  }
+  return null;
+}
+
+// Function to get all datasets
+function getAllDatasets() {
+  const datasetsDir = path.join(__dirname, '../uploads/datasets');
+  const datasetDirs = fs.readdirSync(datasetsDir);
+
+  const datasets = datasetDirs
+    .map(datasetName => getDatasetInfo(datasetName))
+    .filter(info => info !== null);
+
+  return datasets;
+}
+
+// Route to render the datasets page
+router.get('/', (req, res) => {
+  const datasets = getAllDatasets();
+  res.render('datasets', { title: 'Datasets', datasets });
+});
+
 // Route to get dataset info as JSON
 router.get('/:datasetName/info', (req, res) => {
   const datasetName = req.params.datasetName;
-  const infoFilePath = path.join(__dirname, '../uploads/datasets', datasetName, 'info.json');
-
-  fs.readFile(infoFilePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(`Error reading info.json for dataset ${datasetName}:`, err);
-      return res.status(404).json({ error: 'Dataset not found' });
-    }
-
-    try {
-      const info = JSON.parse(data);
-      res.json(info);
-    } catch (parseErr) {
-      console.error(`Error parsing info.json for dataset ${datasetName}:`, parseErr);
-      res.status(500).json({ error: 'Error parsing dataset information' });
-    }
-  });
+  const info = getDatasetInfo(datasetName);
+  if (info) {
+    res.json(info);
+  } else {
+    res.status(404).json({ error: 'Dataset not found' });
+  }
 });
 
 module.exports = router;

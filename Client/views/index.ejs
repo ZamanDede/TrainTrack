@@ -1,6 +1,10 @@
 <%- include('components/navbar') %>
 
 <div class="container">
+  <% if (error) { %>
+    <%- include('components/error', { errorMessage: error }) %>
+  <% } %>
+
   <h1>Welcome to <%= title %> Page</h1>
   <p>This is the home page. Use the navigation above to explore the app.</p>
 </div>

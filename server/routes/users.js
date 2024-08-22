@@ -74,8 +74,10 @@ router.get('/register', (req, res) => {
 
 // Serve the login form
 router.get('/login', (req, res) => {
-  res.render('login', { title: 'Login', error: null });
+  const errorMessage = req.query.error || null;  // Get error message from query parameter if it exists
+  res.render('login', { title: 'Login', error: errorMessage });
 });
+
 
 
 // Admin User List (Protected Route)

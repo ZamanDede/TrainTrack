@@ -53,8 +53,11 @@ app.use("/datasets", datasetRoutes);  // Mount the dataset route
 
 // Route for the home page
 app.get('/', (req, res) => {
-  res.render('index', { title: 'Home' });
+  const errorMessage = req.query.error;  // Get error message from query parameter
+  res.render('index', { title: 'Home', error: errorMessage });
 });
+
+
 
 // Test DB connection route
 app.get('/test-db', async (req, res) => {
