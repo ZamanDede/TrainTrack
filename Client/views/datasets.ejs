@@ -7,13 +7,14 @@
   <div class="row">
     <% datasets.forEach(dataset => { %>
       <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title"><%= dataset.title %></h5>
-            <p class="card-text"><%= dataset.description %></p>
-            <a href="/datasets/<%= dataset.id %>/info" class="btn btn-primary">More Info</a>
-          </div>
-        </div>
+        <%- include('components/card', {
+          item: {
+            heading: dataset.heading,
+            author: dataset.author,
+            retrieval_link: dataset.retrieval_link,  // External link if provided
+            imageUrl: dataset.imageUrl || '/img/default.jpg'  // Use default image if none is provided
+          }
+        }) %>
       </div>
     <% }); %>
   </div>
