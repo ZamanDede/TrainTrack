@@ -12,7 +12,7 @@
             heading: model.heading,
             author: model.author,
             retrieval_link: model.retrieval_link,  // External link if provided
-            localLink: model.localLink,  // Local link if applicable
+            localLink: `/models/${model.id}`,  // Local link for individual model page
             imageUrl: model.imageUrl || '/img/default.jpg'  // Use default image if none is provided
           }
         }) %>

@@ -1,8 +1,13 @@
 <div class="card mb-4">
-  <img src="<%= item.imageUrl || '/img/default.jpg' %>" class="card-img-top" alt="<%= item.heading %> Image" style="height: 200px; object-fit: cover;">
+  <img src="<%= item.imageUrl %>" class="card-img-top" alt="<%= item.heading %> Image" style="height: 200px; object-fit: cover;">
   <div class="card-body">
     <h5 class="card-title"><%= item.heading %></h5>
     <p class="card-text"><strong>Author:</strong> <%= item.author %></p>
-    <a href="<%= item.retrieval_link || item.localLink %>" class="btn btn-primary">View Details</a>
+    <% if (item.retrieval_link) { %>
+      <a href="<%= item.retrieval_link %>" class="btn btn-primary">View Details</a>
+    <% } %>
+    <% if (item.localLink) { %>
+      <a href="<%= item.localLink %>" class="btn btn-secondary">View Model</a>
+    <% } %>
   </div>
 </div>
