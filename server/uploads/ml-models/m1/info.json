@@ -1,9 +1,10 @@
 {
-  "title": "Support Vector Machine (SVM) Model",
+  "heading": "Support Vector Machine (SVM) Model",
   "description": "A binary classification model using a linear SVM. Suitable for tasks involving numerical input features.",
   "model_type": "SVM",
   "task_type": "Classification",
   "usage": "General-purpose model for predicting binary outcomes.",
   "created_at": "2024-08-23",
-  "last_updated": "2024-08-23"
+  "last_updated": "2024-08-23",
+  "author": "Admin"
 }
