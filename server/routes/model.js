@@ -3,16 +3,27 @@ const fs = require('fs');
 const path = require('path');
 const router = express.Router();
 
-// Utility function to ensure user is authenticated
-function ensureAuthenticated(req, res, next, redirectUrl = '/users/login', errorMessage = "You are not logged in.") {
+function ensureAuthenticated(req, res, next, redirectUrl = '/users/login', errorMessage = "You are not logged in.", deniedErrorMessage = "Access denied, upgrade to premium.") {
   const user = res.locals.user;
 
   if (!user) {
+    // User is not authenticated
     return res.redirect(`${redirectUrl}?error=${encodeURIComponent(errorMessage)}`);
   }
 
-  next();  // Proceed to the next middleware/route handler if the user is authenticated
+  // Check if the user is a regular user
+  if (user.userType === 'regular') {
+    // User is authenticated but not allowed to access the route
+    return res.render('index', {
+      title: 'Home',
+      error: deniedErrorMessage
+    });
+  }
+
+  // User is authenticated and allowed to access the route
+  next();
 }
+
 
 // Function to get model info from file
 function getModelInfo(modelId) {
@@ -48,18 +59,16 @@ function getAllModels() {
   const modelDirs = fs.readdirSync(modelsDir);
 
   // Filter directories that start with 'm'
-  const models = modelDirs
+  return modelDirs
     .filter(dir => dir.startsWith('m'))  // Only include directories starting with 'm'
-    .map(modelName => {
-      const modelInfo = getModelInfo(modelName);
+    .map(modelId => {
+      const modelInfo = getModelInfo(modelId);
       if (modelInfo) {
-        return { id: modelName, ...modelInfo };  // Include directory name as id
+        return { id: modelId, ...modelInfo };  // Include directory name as id
       }
       return null;
     })
     .filter(info => info !== null);
-
-  return models;
 }
 
 // Route to render the models page
