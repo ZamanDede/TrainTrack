@@ -1,0 +1,15 @@
+# Node.js dependencies
+node_modules/
+
+# Python virtual environments inside ml-models
+server/uploads/ml-models/venv/
+
+# Environment variables
+server/.env
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Log files
+*.log
