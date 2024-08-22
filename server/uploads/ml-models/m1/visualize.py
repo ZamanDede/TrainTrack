@@ -11,7 +11,7 @@ model = joblib.load(model_filename)
 scaler = joblib.load(scaler_filename)
 
 # Load the dataset
-file_path = '../../datasets/chess-games.csv'
+file_path = '../../datasets/ds1/chess-games.csv'
 data = pd.read_csv(file_path)
 
 # Select relevant features

@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score, classification_report
 import joblib
 
 # Load the dataset
-file_path = '../../datasets/chess-games.csv'  # Adjusted path for 2 folders deep
+file_path = '../../datasets/ds1/chess-games.csv'  # Adjusted path for 2 folders deep
 data = pd.read_csv(file_path)
 
 # Select relevant features
