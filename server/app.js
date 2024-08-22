@@ -44,12 +44,12 @@ app.use((req, res, next) => {
 // Route imports
 const userRoutes = require('./routes/users');
 const modelRoutes = require('./routes/model');
-const datasetRoutes = require('./routes/dataset');  // Import the dataset route
+const datasetRoutes = require('./routes/dataset');
 
 // Route mounts
 app.use("/users", userRoutes);
 app.use("/models", modelRoutes);
-app.use("/datasets", datasetRoutes);  // Mount the dataset route
+app.use("/datasets", datasetRoutes);
 
 // Route for the home page
 app.get('/', (req, res) => {
