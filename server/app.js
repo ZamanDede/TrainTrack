@@ -18,6 +18,7 @@ const port = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../Client/views'));
 
+
 // Middleware setup
 app.use(bodyParser.json());  // Parse JSON bodies
 app.use(bodyParser.urlencoded({ extended: true }));  // Parse URL-encoded bodies
@@ -25,6 +26,9 @@ app.use(cookieParser());  // Parse cookies
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, '../Client/public')));
+
+// Serve static files from the "uploads" directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Middleware to log requests
 app.use((req, res, next) => {

@@ -14,44 +14,113 @@
         <!-- Full Model Info Section -->
         <div class="model-info">
             <h2>Model Information</h2>
+
+            <!-- Info Table -->
             <div class="row">
-                <div class="col-md-6">
-                    <h3>Overview</h3>
-                    <p>
-                        <%= model.overview %>
-                    </p>
-                </div>
-                <div class="col-md-6">
-                    <h3>Visualizations</h3>
-                    <!-- Carousel for model visuals -->
-                    <% if (model.visuals && model.visuals.length) { %>
-                        <div id="modelVisualsCarousel" class="carousel slide" data-ride="carousel">
-                            <div class="carousel-inner">
-                                <% model.visuals.forEach((visual, index)=> { %>
-                                    <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                                        <img src="<%= visual %>" class="d-block w-100" alt="Visualization">
-                                    </div>
-                                    <% }); %>
-                            </div>
-                            <a class="carousel-control-prev" href="#modelVisualsCarousel" role="button"
-                                data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#modelVisualsCarousel" role="button"
-                                data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </div>
-                        <% } else { %>
-                            <p>No visualizations available.</p>
-                            <% } %>
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Heading</td>
+                                <td>
+                                    <%= model.heading %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Description</td>
+                                <td>
+                                    <%= model.description %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Model Type</td>
+                                <td>
+                                    <%= model.model_type %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Task Type</td>
+                                <td>
+                                    <%= model.task_type %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Usage</td>
+                                <td>
+                                    <%= model.usage %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Created At</td>
+                                <td>
+                                    <%= model.created_at %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Last Updated</td>
+                                <td>
+                                    <%= model.last_updated %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Author</td>
+                                <td>
+                                    <%= model.author %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dataset</td>
+                                <td>
+                                    <%= model.dataset %>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
+
+            <!-- Visualizations Carousel -->
+            <div id="modelVisualsCarousel" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <% model.visuals.forEach((visual, index)=> { %>
+                        <li data-target="#modelVisualsCarousel" data-slide-to="<%= index %>"
+                            class="<%= index === 0 ? 'active' : '' %>"></li>
+                        <% }); %>
+                </ol>
+                <div class="carousel-inner">
+                    <% model.visuals.forEach((visual, index)=> { %>
+                        <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                            <img class="d-block w-100" src="<%= visual %>" alt="Slide <%= index + 1 %>"
+                                style="max-height: 500px; object-fit: contain;">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5></h5>
+                            </div>
+                        </div>
+                        <% }); %>
+                </div>
+                <a class="carousel-control-prev" href="#modelVisualsCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#modelVisualsCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+
+
+
+
+            <!-- Metrics Section -->
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <h3>Metrics</h3>
                     <% if (model.metrics && model.metrics.length) { %>
                         <% model.metrics.forEach(metric=> { %>
@@ -63,6 +132,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Training Section -->
         <div class="training-section">
