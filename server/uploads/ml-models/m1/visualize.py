@@ -3,6 +3,11 @@ import joblib
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import confusion_matrix, classification_report
+import os
+
+# Set the working directory to the script's location
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
 
 # Load the saved model and scaler
 model_filename = 'svm_model.pkl'

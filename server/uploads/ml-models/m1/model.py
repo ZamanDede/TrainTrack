@@ -4,6 +4,11 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, classification_report
 import joblib
+import os
+
+# Set the working directory to the script's location
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
 
 # Load the dataset
 file_path = '../../datasets/ds1/chess-games.csv'  # Adjusted path for 2 folders deep

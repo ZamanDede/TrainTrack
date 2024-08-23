@@ -1,76 +1,84 @@
 <%- include('components/navbar') %>
 
-<div class="container">
-  <!-- Model Header Section -->
-  <div class="model-header">
-    <h1><%= model.heading %></h1>
-    <p><%= model.description %></p>
-  </div>
+    <div class="container">
+        <!-- Model Header Section -->
+        <div class="model-header">
+            <h1>
+                <%= model.heading %>
+            </h1>
+            <p>
+                <%= model.description %>
+            </p>
+        </div>
 
-  <!-- Full Model Info Section -->
-  <div class="model-info">
-    <h2>Model Information</h2>
-    <div class="row">
-      <div class="col-md-6">
-        <h3>Overview</h3>
-        <p><%= model.overview %></p>
-      </div>
-      <div class="col-md-6">
-        <h3>Visualizations</h3>
-        <!-- Carousel for model visuals -->
-        <% if (model.visuals && model.visuals.length) { %>
-          <div id="modelVisualsCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-              <% model.visuals.forEach((visual, index) => { %>
-                <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                  <img src="<%= visual %>" class="d-block w-100" alt="Visualization">
+        <!-- Full Model Info Section -->
+        <div class="model-info">
+            <h2>Model Information</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Overview</h3>
+                    <p>
+                        <%= model.overview %>
+                    </p>
                 </div>
-              <% }); %>
+                <div class="col-md-6">
+                    <h3>Visualizations</h3>
+                    <!-- Carousel for model visuals -->
+                    <% if (model.visuals && model.visuals.length) { %>
+                        <div id="modelVisualsCarousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <% model.visuals.forEach((visual, index)=> { %>
+                                    <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                        <img src="<%= visual %>" class="d-block w-100" alt="Visualization">
+                                    </div>
+                                    <% }); %>
+                            </div>
+                            <a class="carousel-control-prev" href="#modelVisualsCarousel" role="button"
+                                data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#modelVisualsCarousel" role="button"
+                                data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        <% } else { %>
+                            <p>No visualizations available.</p>
+                            <% } %>
+                </div>
             </div>
-            <a class="carousel-control-prev" href="#modelVisualsCarousel" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#modelVisualsCarousel" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
-          </div>
-        <% } else { %>
-          <p>No visualizations available.</p>
-        <% } %>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-md-6">
-        <h3>Metrics</h3>
-        <% if (model.metrics && model.metrics.length) { %>
-          <% model.metrics.forEach(metric => { %>
-            <pre><%= metric.content %></pre> <!-- Display metrics file content -->
-          <% }); %>
-        <% } else { %>
-          <p>No metrics available.</p>
-        <% } %>
-      </div>
-    </div>
-  </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Metrics</h3>
+                    <% if (model.metrics && model.metrics.length) { %>
+                        <% model.metrics.forEach(metric=> { %>
+                            <pre><%= metric.content %></pre> <!-- Display metrics file content -->
+                            <% }); %>
+                                <% } else { %>
+                                    <p>No metrics available.</p>
+                                    <% } %>
+                </div>
+            </div>
+        </div>
 
-  <!-- Training Section -->
-  <div class="training-section">
-    <h2>Training</h2>
-    <div class="row">
-      <div class="col-md-6">
-        <button class="btn btn-primary" onclick="startTraining()">Train Model</button>
-        <p id="training-status">Status: Not Started</p>
-      </div>
+        <!-- Training Section -->
+        <div class="training-section">
+            <h2>Training</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <form action="/models/<%= model.id %>/execute" method="POST" style="display: inline;">
+                        <input type="hidden" name="script" value="model.py">
+                        <button type="submit" class="btn btn-primary">Run model.py</button>
+                    </form>
+                    <form action="/models/<%= model.id %>/execute" method="POST" style="display: inline;">
+                        <input type="hidden" name="script" value="visualize.py">
+                        <button type="submit" class="btn btn-secondary">Run visualize.py</button>
+                    </form>
+                    <p id="training-status">Status: Not Started</p>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-
-<script>
-  function startTraining() {
-    // Implement the logic to start model training
-    // document.getElementById('training-status').innerText = 'Status: Training in progress...';
-  }
-</script>
