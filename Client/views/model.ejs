@@ -69,16 +69,30 @@
             <h2>Training</h2>
             <div class="row">
                 <div class="col-md-6">
-                    <form action="/models/<%= model.id %>/execute" method="POST" style="display: inline;">
+                    <form id="trainForm" action="/models/<%= model.id %>/execute" method="POST"
+                        style="display: inline;">
                         <input type="hidden" name="script" value="model.py">
-                        <button type="submit" class="btn btn-primary">Run model.py</button>
+                        <button id="trainButton" type="submit" class="btn btn-primary">Run model.py</button>
                     </form>
-                    <form action="/models/<%= model.id %>/execute" method="POST" style="display: inline;">
+                    <form id="visualizeForm" action="/models/<%= model.id %>/execute" method="POST"
+                        style="display: inline;">
                         <input type="hidden" name="script" value="visualize.py">
-                        <button type="submit" class="btn btn-secondary">Run visualize.py</button>
+                        <button id="visualizeButton" type="submit" class="btn btn-secondary" disabled>Run
+                            visualize.py</button>
                     </form>
                     <p id="training-status">Status: Not Started</p>
                 </div>
             </div>
         </div>
+
     </div>
+
+    <!-- Include the external JavaScript file -->
+    <script src="/js/modelStatus.js"></script>
+
+    <!-- Inline Script to Pass Model ID -->
+    <script>
+        var modelId = '<%= model.id %>';
+        checkStatus(modelId);
+        setInterval(function () { checkStatus(modelId); }, 2000); // Check every 2 seconds
+    </script>

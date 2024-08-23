@@ -115,6 +115,8 @@ router.get('/:modelId', (req, res) => {
 });
 
 
+let modelStatus = {}; // This object will track the status of each model by ID
+
 router.post('/:modelId/execute', (req, res) => {
   ensureAuthenticated(req, res, () => {
     const modelId = req.params.modelId;
@@ -122,22 +124,31 @@ router.post('/:modelId/execute', (req, res) => {
     const scriptPath = path.join(__dirname, '../uploads/ml-models', modelId, scriptName);
     const pythonPath = path.join(__dirname, '../uploads/ml-models/venv/bin/python3'); // Path to your virtual environment's Python
 
+    // Set status to 'running'
+    modelStatus[modelId] = 'running';
+
     if (fs.existsSync(scriptPath)) {
-      // Execute the Python script using the virtual environment's Python
       exec(`${pythonPath} ${scriptPath}`, (error, stdout, stderr) => {
         if (error) {
           console.error(`Error executing script: ${stderr}`);
+          modelStatus[modelId] = 'error'; // Set status to 'error' if the script fails
           return res.status(500).json({ error: 'Error executing script', details: stderr });
         }
         console.log(`Script output: ${stdout}`);
-
-        // Redirect back to the same model page
+        modelStatus[modelId] = 'finished'; // Set status to 'finished' when done
         res.redirect(`/models/${modelId}`);
       });
     } else {
+      modelStatus[modelId] = 'not found';
       res.status(404).json({ error: 'Script not found' });
     }
   }, '/users/login', "You are not logged in. Please log in to execute the model.");
+});
+
+router.get('/:modelId/status', (req, res) => {
+  const modelId = req.params.modelId;
+  const status = modelStatus[modelId] || 'not started';
+  res.json({ status });
 });
 
 
