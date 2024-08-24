@@ -4,18 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const router = express.Router();
 const pool = require('../db');
-
-
-// Utility function to ensure user is authenticated
-function ensureAuthenticated(req, res, next, redirectUrl = '/users/login', errorMessage = "You are not logged in.") {
-  const user = res.locals.user;
-
-  if (!user) {
-    return res.redirect(`${redirectUrl}?error=${encodeURIComponent(errorMessage)}`);
-  }
-
-  next();  // Proceed to the next middleware/route handler if the user is authenticated
-}
+const { ensureAuthenticated, ensurePremiumOrAdmin } = require('../auth');  // Import necessary middlewares
 
 // Function to get dataset info from file
 function getDatasetInfo(datasetName) {
@@ -39,44 +28,34 @@ function getAllDatasets() {
   return datasets;
 }
 
-// Route to render the datasets page
-router.get('/', (req, res) => {
-  // Use the authentication utility
-  ensureAuthenticated(req, res, () => {
-    const datasets = getAllDatasets();
-    res.render('datasets', { title: 'Datasets', datasets });
-  }, '/users/login', "You are not logged in. Please log in to access the Datasets page.");
+// Route to render the datasets page (View Only, accessible to all logged-in users)
+router.get('/', ensureAuthenticated, (req, res) => {
+  const datasets = getAllDatasets();
+  res.render('datasets', { title: 'Datasets', datasets });
 });
 
-// Route to get dataset info as JSON
-router.get('/:datasetName/info', (req, res) => {
-  // Use the authentication utility
-  ensureAuthenticated(req, res, () => {
-    const datasetName = req.params.datasetName;
-    const info = getDatasetInfo(datasetName);
-    if (info) {
-      res.json(info);
-    } else {
-      res.status(404).json({ error: 'Dataset not found' });
-    }
-  }, '/users/login', "You are not logged in. Please log in to access the dataset information.");
+// Route to get dataset info as JSON (View Only, accessible to all logged-in users)
+router.get('/:datasetName/info', ensureAuthenticated, (req, res) => {
+  const datasetName = req.params.datasetName;
+  const info = getDatasetInfo(datasetName);
+  if (info) {
+    res.json(info);
+  } else {
+    res.status(404).json({ error: 'Dataset not found' });
+  }
 });
-
-
-// New rotues
 
 // Multer storage configuration without `destination` for now
 const storage = multer.memoryStorage();  // Temporarily store files in memory
-
 const upload = multer({ storage: storage });
 
-// Route to render the dataset upload form
-router.get('/upload', (req, res) => {
+// Route to render the dataset upload form (Requires premium or admin access)
+router.get('/upload', ensureAuthenticated, ensurePremiumOrAdmin, (req, res) => {
   res.render('upload-datasets', { title: 'Upload Dataset' });
 });
 
-// Route to handle dataset upload and info submission
-router.post('/upload', upload.fields([{ name: 'files', maxCount: 10 }]), async (req, res) => {
+// Route to handle dataset upload and info submission (Requires premium or admin access)
+router.post('/upload', ensureAuthenticated, ensurePremiumOrAdmin, upload.fields([{ name: 'files', maxCount: 10 }]), async (req, res) => {
   const {
     heading, description, purposes, task_type, source, dataset_size,
     data_format, license, author, retrieval_link

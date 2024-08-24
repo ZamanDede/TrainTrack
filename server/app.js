@@ -4,9 +4,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const pool = require('./db');  // Import the database pool from db.js
-
-// Import the authentication middleware
-const authenticateJWT = require('./auth');
+const { authenticateJWT, ensureAuthenticated, ensurePremiumOrAdmin, ensureAdmin } = require('./auth');  // Import all middleware functions
 
 // Load environment variables from .env file
 dotenv.config({ path: path.resolve(__dirname, '.env') });
@@ -17,7 +15,6 @@ const port = process.env.PORT || 3000;
 // Set up EJS as the template engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../Client/views'));
-
 
 // Middleware setup
 app.use(bodyParser.json());  // Parse JSON bodies
@@ -36,7 +33,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Use the authentication middleware
+// Use the authentication middleware globally
 app.use(authenticateJWT);
 
 // Database connection middleware
@@ -50,18 +47,17 @@ const userRoutes = require('./routes/users');
 const modelRoutes = require('./routes/model');
 const datasetRoutes = require('./routes/dataset');
 
-// Route mounts
+// Apply the authentication middleware to relevant routes
 app.use("/users", userRoutes);
 app.use("/models", modelRoutes);
 app.use("/datasets", datasetRoutes);
+
 
 // Route for the home page
 app.get('/', (req, res) => {
   const errorMessage = req.query.error;  // Get error message from query parameter
   res.render('index', { title: 'Home', error: errorMessage });
 });
-
-
 
 // Test DB connection route
 app.get('/test-db', async (req, res) => {
