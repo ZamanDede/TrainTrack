@@ -25,6 +25,16 @@ const authenticateJWT = (req, res, next) => {
   next();
 };
 
+// Function to generate JWT
+function generateJWT(user) {
+  const secretKey = process.env.JWT_SECRET;
+  return jwt.sign(
+    { id: user.id, username: user.username, email: user.email, userType: user.user_type },
+    secretKey,
+    { expiresIn: '1h' }  // Token expires in 1 hour
+  );
+}
+
 // Middleware to ensure the user is authenticated
 function ensureAuthenticated(req, res, next, redirectUrl = '/users/login', errorMessage = "You are not logged in.") {
   const user = res.locals.user;
@@ -63,6 +73,7 @@ function ensureAdmin(req, res, next) {
 
 module.exports = {
   authenticateJWT,
+  generateJWT,  // Export the generateJWT function
   ensureAuthenticated,
   ensurePremiumOrAdmin,
   ensureAdmin

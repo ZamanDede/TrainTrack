@@ -1,10 +1,8 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const pool = require('../db');  // Import the database pool
-
-const SECRET_KEY = process.env.JWT_SECRET;  // Ensure you set this in your environment variables
+const { generateJWT, ensureAuthenticated, ensureAdmin } = require('../auth');  // Import the necessary functions from auth.js
 
 // User Registration
 router.post('/register', async (req, res) => {
@@ -49,12 +47,8 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: true, message: 'Incorrect email or password' });
     }
 
-    // Generate JWT
-    const token = jwt.sign(
-      { id: user.rows[0].id, username: user.rows[0].username, email: user.rows[0].email, userType: user.rows[0].user_type },
-      SECRET_KEY,
-      { expiresIn: '1h' }  // Token expires in 1 hour
-    );
+    // Generate JWT using the centralized function
+    const token = generateJWT(user.rows[0]);
 
     // Send the JWT as a cookie
     res.cookie('token', token, { httpOnly: true });
@@ -78,24 +72,9 @@ router.get('/login', (req, res) => {
   res.render('login', { title: 'Login', error: errorMessage });
 });
 
-
-
 // Admin User List (Protected Route)
-router.get('/list', async (req, res) => {
-  const token = req.cookies.token;  // Assuming you're storing JWT in cookies
-
-  if (!token) {
-    return res.status(401).json({ error: true, message: 'Access denied, no token provided' });
-  }
-
+router.get('/list', ensureAuthenticated, ensureAdmin, async (req, res) => {
   try {
-    const decoded = jwt.verify(token, SECRET_KEY);
-
-    if (decoded.userType !== 'admin') {
-      return res.status(403).json({ error: true, message: 'Access denied, not an admin' });
-    }
-
-    // Sort by user_type with a specific order and then by username alphabetically
     const result = await pool.query(`
       SELECT id, username, email, user_type
       FROM users
@@ -109,14 +88,12 @@ router.get('/list', async (req, res) => {
     `);
 
     const users = result.rows;
-
     res.render('users', { title: 'User List', users });
   } catch (err) {
     console.error('Error fetching users:', err);
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
-
 
 // Logout Route
 router.get('/logout', (req, res) => {
@@ -125,21 +102,10 @@ router.get('/logout', (req, res) => {
 });
 
 // Delete User (Admin Only)
-router.post('/delete/:id', async (req, res) => {
+router.post('/delete/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
   const { id } = req.params;
-  const token = req.cookies.token;  // Assuming you're storing JWT in cookies
-
-  if (!token) {
-    return res.status(401).json({ error: true, message: 'Access denied, no token provided' });
-  }
 
   try {
-    const decoded = jwt.verify(token, SECRET_KEY);
-
-    if (decoded.userType !== 'admin') {
-      return res.status(403).json({ error: true, message: 'Access denied, not an admin' });
-    }
-
     await pool.query('DELETE FROM users WHERE id = $1', [id]);
     res.redirect('/users/list');  // Redirect to the user list after deletion
   } catch (err) {
@@ -149,27 +115,16 @@ router.post('/delete/:id', async (req, res) => {
 });
 
 // Change User Type (Admin Only)
-router.post('/changeType/:id', async (req, res) => {
+router.post('/changeType/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
   const { id } = req.params;
   const { user_type } = req.body;
-  const token = req.cookies.token;  // Assuming you're storing JWT in cookies
 
-  if (!token) {
-    return res.status(401).json({ error: true, message: 'Access denied, no token provided' });
+  // Ensure valid user type
+  if (!['regular', 'premium', 'admin'].includes(user_type)) {
+    return res.status(400).json({ error: true, message: 'Invalid user type' });
   }
 
   try {
-    const decoded = jwt.verify(token, SECRET_KEY);
-
-    if (decoded.userType !== 'admin') {
-      return res.status(403).json({ error: true, message: 'Access denied, not an admin' });
-    }
-
-    // Ensure valid user type
-    if (!['regular', 'premium', 'admin'].includes(user_type)) {
-      return res.status(400).json({ error: true, message: 'Invalid user type' });
-    }
-
     await pool.query('UPDATE users SET user_type = $1 WHERE id = $2', [user_type, id]);
     res.redirect('/users/list');  // Redirect to the user list after updating the user type
   } catch (err) {
@@ -177,7 +132,5 @@ router.post('/changeType/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to change user type' });
   }
 });
-
-
 
 module.exports = router;
