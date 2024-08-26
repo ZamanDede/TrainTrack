@@ -4,9 +4,31 @@
   <h1>Datasets</h1>
   <p>Explore the available datasets below.</p>
 
-  <!-- Sort Controls -->
+  <!-- Search and Sort Controls -->
   <div class="row mb-4">
-    <div class="col-md-6 offset-md-3">
+    <div class="col-md-4">
+      <label for="searchField">Search in:</label>
+      <select id="searchField" class="form-control">
+        <option value="general">General</option>
+        <option value="heading">Heading</option>
+        <option value="author">Author</option>
+        <option value="description">Description</option>
+        <option value="size">Size</option>
+        <option value="taskType">Task Type</option>
+        <option value="dataFormat">Data Format</option>
+        <option value="license">License</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label for="searchInput">Search:</label>
+      <div class="input-group">
+        <input type="text" id="searchInput" class="form-control" placeholder="Enter search term">
+        <div class="input-group-append">
+          <button id="searchButton" class="btn btn-primary" type="button">Search</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
       <label for="sortBy">Sort By:</label>
       <select id="sortBy" class="form-control">
         <option value="headingAsc">Heading (A-Z)</option>
@@ -19,14 +41,22 @@
 
   <div class="row" id="datasetContainer">
     <% datasets.forEach(dataset => { %>
-      <% if (dataset.heading && dataset.author) { %>  <!-- Check if the dataset has necessary fields -->
-        <div class="col-md-4 position-relative dataset-card" data-heading="<%= dataset.heading %>" data-author="<%= dataset.author %>">
+      <% if (dataset.heading && dataset.author) { %>
+        <div class="col-md-4 position-relative dataset-card"
+          data-heading="<%= dataset.heading %>"
+          data-author="<%= dataset.author %>"
+          data-description="<%= dataset.description %>"
+          data-size="<%= dataset.dataset_size %>"
+          data-tasktype="<%= dataset.task_type %>"
+          data-dataformat="<%= dataset.data_format %>"
+          data-license="<%= dataset.license %>">
           <%- include('components/card', {
             item: {
               heading: dataset.heading,
               author: dataset.author,
-              retrieval_link: dataset.retrieval_link,  // External link if provided
-              imageUrl: dataset.imageUrl || '/img/default.jpg'  // Use default image if none is provided
+              task_type: dataset.task_type,
+              retrieval_link: dataset.retrieval_link,
+              imageUrl: dataset.imageUrl || '/img/default.jpg'
             }
           }) %>
 
@@ -50,6 +80,7 @@
                   <p><strong>Author:</strong> <%= dataset.author %></p>
                   <p><strong>Description:</strong> <%= dataset.description %></p>
                   <p><strong>Size:</strong> <%= dataset.dataset_size %></p>
+                  <p><strong>Task Type:</strong> <%= dataset.task_type %></p>
                   <p><strong>Data Format:</strong> <%= dataset.data_format %></p>
                   <p><strong>License:</strong> <%= dataset.license %></p>
                   <p><strong>DB ID:</strong> <%= dataset.id %></p>
