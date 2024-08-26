@@ -34,6 +34,7 @@ async function getAllDatasets() {
 
       return {
         id: datasetId,
+        task_type: row.info.task_type,
         ...row.info,
         imageUrl: imageUrl  // Set the imageUrl to the correct value
       };

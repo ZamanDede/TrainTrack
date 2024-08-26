@@ -4,10 +4,23 @@
   <h1>Datasets</h1>
   <p>Explore the available datasets below.</p>
 
-  <div class="row">
+  <!-- Sort Controls -->
+  <div class="row mb-4">
+    <div class="col-md-6 offset-md-3">
+      <label for="sortBy">Sort By:</label>
+      <select id="sortBy" class="form-control">
+        <option value="headingAsc">Heading (A-Z)</option>
+        <option value="headingDesc">Heading (Z-A)</option>
+        <option value="authorAsc">Author (A-Z)</option>
+        <option value="authorDesc">Author (Z-A)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row" id="datasetContainer">
     <% datasets.forEach(dataset => { %>
       <% if (dataset.heading && dataset.author) { %>  <!-- Check if the dataset has necessary fields -->
-        <div class="col-md-4 position-relative">
+        <div class="col-md-4 position-relative dataset-card" data-heading="<%= dataset.heading %>" data-author="<%= dataset.author %>">
           <%- include('components/card', {
             item: {
               heading: dataset.heading,
@@ -16,6 +29,37 @@
               imageUrl: dataset.imageUrl || '/img/default.jpg'  // Use default image if none is provided
             }
           }) %>
+
+          <!-- Info Button -->
+          <button class="btn btn-info btn-sm position-absolute" style="top: 10px; left: 10px;" data-toggle="modal" data-target="#infoModal<%= dataset.id %>">
+            Info
+          </button>
+
+          <!-- Info Modal -->
+          <div class="modal fade" id="infoModal<%= dataset.id %>" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel<%= dataset.id %>" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="infoModalLabel<%= dataset.id %>">Dataset Info</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p><strong>Heading:</strong> <%= dataset.heading %></p>
+                  <p><strong>Author:</strong> <%= dataset.author %></p>
+                  <p><strong>Description:</strong> <%= dataset.description %></p>
+                  <p><strong>Size:</strong> <%= dataset.dataset_size %></p>
+                  <p><strong>Data Format:</strong> <%= dataset.data_format %></p>
+                  <p><strong>License:</strong> <%= dataset.license %></p>
+                  <p><strong>DB ID:</strong> <%= dataset.id %></p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <% if (user && user.userType === 'admin') { %>
             <!-- Delete button or X mark for admins -->
@@ -31,13 +75,5 @@
   </div>
 </div>
 
-<script>
-  // Add a confirmation dialog before submitting the delete form
-  document.querySelectorAll('.delete-form').forEach(form => {
-    form.addEventListener('submit', function(event) {
-      if (!confirm('Are you sure you want to delete this dataset? This action cannot be undone.')) {
-        event.preventDefault(); // Prevent form submission if not confirmed
-      }
-    });
-  });
-</script>
+<!-- Include the external JavaScript file -->
+<script src="/js/datasetPresentation.js"></script>
