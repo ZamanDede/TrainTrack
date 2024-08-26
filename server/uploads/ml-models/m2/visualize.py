@@ -12,10 +12,10 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
 # Load the dataset paths
-train_dir = '../../datasets/ds2/train'  # Path to the training set
+train_dir = '../../datasets/34/train'  # Path to the training set
 
 # Load the training CSV file
-train_csv_path = '../../datasets/ds2/Training_set.csv'
+train_csv_path = '../../datasets/34/Training_set.csv'
 train_labels = pd.read_csv(train_csv_path)
 
 # Create a dictionary to map filenames to their labels
@@ -53,11 +53,21 @@ y_pred = model.predict(X_train)
 y_pred_classes = np.argmax(y_pred, axis=1)
 y_true_classes = np.argmax(y_train, axis=1)
 
-# Plot Confusion Matrix
+# Compute the confusion matrix
 cm = confusion_matrix(y_true_classes, y_pred_classes)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_indices.keys())
+
+# Plot Confusion Matrix with improved readability
+plt.figure(figsize=(12, 10))  # Increase figure size
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=list(class_indices.keys()))
 disp.plot(cmap=plt.cm.Blues)
-plt.title('Confusion Matrix')
+
+# Adjustments for readability
+plt.xticks(rotation=45, ha='right', fontsize=10)  # Rotate x-axis labels and adjust font size
+plt.yticks(fontsize=10)  # Adjust font size of y-axis labels
+plt.title('Confusion Matrix', fontsize=15)
+plt.xlabel('Predicted Label', fontsize=12)
+plt.ylabel('True Label', fontsize=12)
+plt.tight_layout()  # Adjust layout to prevent clipping
 plt.savefig('confusion_matrix.png')
 
 # Plot ROC Curve and AUC for each class

@@ -98,10 +98,16 @@ router.get('/:modelId', ensureAuthenticated, ensurePremiumOrAdmin, (req, res) =>
   }
 });
 
-// Route to execute a model script (Requires premium or admin access)
+
 router.post('/:modelId/execute', ensureAuthenticated, ensurePremiumOrAdmin, (req, res) => {
   const modelId = req.params.modelId;
   const scriptName = req.body.script;
+
+  if (!scriptName) {
+    console.error('Error: Script name is undefined.');
+    return res.status(400).json({ error: 'Script name is required.' });
+  }
+
   const scriptPath = path.join(__dirname, '../uploads/ml-models', modelId, scriptName);
   const pythonPath = path.join(__dirname, '../uploads/ml-models/venv/bin/python3'); // Path to your virtual environment's Python
 
@@ -125,7 +131,7 @@ router.post('/:modelId/execute', ensureAuthenticated, ensurePremiumOrAdmin, (req
   }
 });
 
-// Route to get the execution status of a model (Requires premium or admin access)
+
 router.get('/:modelId/status', ensureAuthenticated, ensurePremiumOrAdmin, (req, res) => {
   const modelId = req.params.modelId;
   const status = modelStatus[modelId] || 'not started';

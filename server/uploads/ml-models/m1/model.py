@@ -11,7 +11,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
 # Load the dataset
-file_path = '../../datasets/ds1/chess-games.csv'  # Adjusted path for 2 folders deep
+file_path = '../../datasets/13/games.csv'  # Adjusted path for 2 folders deep
 data = pd.read_csv(file_path)
 
 # Select relevant features

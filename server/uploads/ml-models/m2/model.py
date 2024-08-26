@@ -13,10 +13,10 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
 # Load the dataset paths
-train_dir = '../../datasets/ds2/train'  # Path to the training set
+train_dir = '../../datasets/34/train'  # Path to the training set
 
 # Load the training CSV file
-train_csv_path = '../../datasets/ds2/Training_set.csv'
+train_csv_path = '../../datasets/34/Training_set.csv'
 train_labels = pd.read_csv(train_csv_path)
 
 # Create a dictionary to map filenames to their labels
