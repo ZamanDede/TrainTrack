@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function initializeDatasets() {
         originalDatasets = Array.from(datasetContainer.getElementsByClassName('dataset-card'));
         currentDatasets = [...originalDatasets]; // Initial copy
+        // Apply initial sort (A-Z by heading)
+        sortBySelect.value = 'headingAsc'; // Set the initial sort value
+        applySort(); // Sort the datasets initially
+        updateDatasetContainer(); // Update the container with the sorted datasets
     }
 
 
