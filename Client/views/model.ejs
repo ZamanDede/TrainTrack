@@ -1,5 +1,8 @@
+<%- include('components/navbar') %>
 
-                    <%- include('components/navbar') %>
+    <head>
+        <link rel="stylesheet" href="/css/pages/model.css">
+    </head>
 
     <div class="container">
         <!-- Model Header Section -->
@@ -85,53 +88,41 @@
                     </table>
                 </div>
             </div>
+        </div>
 
-
-            <!-- Visualizations Carousel -->
+        <!-- Visualizations Carousel -->
+        <div class="model-visuals">
+            <h2>Visualizations</h2>
             <div id="modelVisualsCarousel" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <% model.visuals.forEach((visual, index)=> { %>
-                        <li data-target="#modelVisualsCarousel" data-slide-to="<%= index %>"
-                            class="<%= index === 0 ? 'active' : '' %>"></li>
-                        <% }); %>
-                </ol>
                 <div class="carousel-inner">
                     <% model.visuals.forEach((visual, index)=> { %>
                         <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
                             <img class="d-block w-100" src="<%= visual %>" alt="Slide <%= index + 1 %>"
                                 style="max-height: 500px; object-fit: contain;">
-                            <div class="carousel-caption d-none d-md-block">
-                                <h5></h5>
-                            </div>
                         </div>
                         <% }); %>
                 </div>
                 <a class="carousel-control-prev" href="#modelVisualsCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
                 </a>
                 <a class="carousel-control-next" href="#modelVisualsCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="sr-only">Next</span>
                 </a>
             </div>
+        </div>
 
-
-
-
-            <!-- Metrics Section -->
-            <div class="row">
-                <div class="col-md-12">
-                    <h3>Metrics</h3>
-                    <% if (model.metrics && model.metrics.length) { %>
-                        <% model.metrics.forEach(metric=> { %>
-                            <pre><%= metric.content %></pre> <!-- Display metrics file content -->
-                            <% }); %>
-                                <% } else { %>
-                                    <p>No metrics available.</p>
-                                    <% } %>
-                </div>
-            </div>
+        <!-- Metrics Section -->
+        <div class="metrics-section">
+            <h3>Metrics</h3>
+            <% if (model.metrics && model.metrics.length) { %>
+                <% model.metrics.forEach(metric=> { %>
+                    <pre><%= metric.content %></pre> <!-- Display metrics file content -->
+                    <% }); %>
+                        <% } else { %>
+                            <p>No metrics available.</p>
+                            <% } %>
         </div>
 
 
@@ -140,22 +131,23 @@
             <h2>Training</h2>
             <div class="row">
                 <div class="col-md-6">
-                    <form id="trainForm" action="/models/<%= model.id %>/execute" method="POST"
-                        style="display: inline;">
+                    <form id="trainForm" action="/models/<%= model.id %>/execute" method="POST" class="inline-form">
                         <input type="hidden" name="script" value="model.py">
-                        <button id="trainButton" type="submit" class="btn btn-primary">Run model.py</button>
+                        <button id="trainButton" type="submit" class="custom-btn">Train</button>
                     </form>
-                    <form id="visualizeForm" action="/models/<%= model.id %>/execute" method="POST"
-                        style="display: inline;">
+                    <form id="visualizeForm" action="/models/<%= model.id %>/execute" method="POST" class="inline-form">
                         <input type="hidden" name="script" value="visualize.py">
-                        <button id="visualizeButton" type="submit" class="btn btn-secondary" disabled>Run
-                            visualize.py</button>
+                        <button id="visualizeButton" type="submit" class="custom-btn" disabled>Visualize</button>
                     </form>
                     <p id="training-status">Status: Not Started</p>
                     <p id="elapsed-time">Elapsed Time: 0h 0m 0s</p>
                 </div>
             </div>
         </div>
+
+    </div>
+
+
 
     </div>
 

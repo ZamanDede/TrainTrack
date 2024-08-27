@@ -1,0 +1,62 @@
+@import url('../global.css'); /* Link to the global CSS */
+
+/* Upload Dataset Form Styles */
+.form-group label {
+    color: var(--primary-color); /* Label text color */
+    font-weight: bold; /* Make labels bold */
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="file"],
+.form-group textarea {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--primary-color); /* Border with primary color */
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="file"]:focus,
+.form-group textarea:focus {
+    border-color: var(--accent-color); /* Border color on focus */
+    box-shadow: 0 0 5px rgba(10, 171, 142, 0.5); /* Slight glow on focus */
+}
+
+.form-control-file {
+    border: none; /* Remove border for file input */
+    padding: 5px 0; /* Adjust padding for file input */
+}
+
+.form-group textarea {
+    resize: vertical; /* Allow vertical resizing */
+}
+
+button.btn {
+    margin-top: 20px;
+    padding: 10px 30px; /* Adjust padding for buttons */
+    font-size: 1.1em; /* Slightly larger font size */
+}
+
+h1 {
+    color: var(--primary-color); /* Heading color */
+    margin-bottom: 30px;
+}
+
+/* Container adjustments for better spacing */
+.container {
+    max-width: 900px;
+    padding: 40px;
+    background-color: var(--secondary-color); /* Background for the form container */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.container h1 {
+    text-align: center;
+}

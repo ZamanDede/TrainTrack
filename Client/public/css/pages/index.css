@@ -1,0 +1,76 @@
+@import url('../global.css'); /* Link to the global CSS */
+
+#carouselExampleIndicators {
+  max-height: 65vh; /* Set the height to 65% of the viewport */
+  overflow: hidden; /* Ensure no overflow */
+}
+
+.carousel-item img {
+  width: 100%; /* Ensure the image takes the full width */
+  height: 65vh; /* Match the image height to the carousel height */
+  object-fit: cover; /* Cover the entire container while maintaining aspect ratio */
+}
+
+.carousel-caption {
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  padding: 10px;
+  border-radius: 5px;
+  color: var(--white-color); /* Ensure text is readable */
+  bottom: 20px; /* Position the caption slightly above the bottom */
+}
+
+.carousel-caption h5, .carousel-caption p {
+  color: var(--white-color); /* Text color for the carousel caption */
+}
+
+/* Additional index-specific styles */
+.hero-section {
+  text-align: center;
+  padding: 50px 0;
+  color: var(--text-color);
+}
+
+.hero-section h1 {
+  font-size: 3em;
+  margin-bottom: 20px;
+}
+
+.hero-section p {
+  font-size: 1.5em;
+  margin-bottom: 40px;
+}
+
+/* Unified styling for cards in both Overview and Coming Soon sections */
+.feature-card {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--primary-color);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-card h4 {
+  color: var(--accent-color);
+}
+
+.feature-card p {
+  color: var(--text-color);
+}
+
+.feature-card i {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+/* Style for containers */
+.container {
+  background-color: var(--background-color);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}

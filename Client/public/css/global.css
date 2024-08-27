@@ -1,0 +1,78 @@
+/* Global CSS Variables */
+:root {
+    --primary-color: #0d1b5e;      /* Metallic Deep Navy Blue */
+    --secondary-color: #3b4558;    /* Darker Cool Charcoal Gray */
+    --background-color: #0a0f29;   /* Midnight Slate */
+    --text-color: #d1d5db;         /* Soft Light Gray */
+    --accent-color: #0aab8e;       /* Deep Mint Green */
+    --danger-color: #d93232;       /* Rich Warm Red */
+    --white-color: #f8f9fa;        /* Slightly Off-White */
+}
+
+
+/* Global Styles */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary-color);
+    margin-top: 0;
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--accent-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    background-color: var(--secondary-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    color: var(--white-color);
+}
+
+.alert-success {
+    background-color: var(--accent-color);
+}
+
+.alert-danger {
+    background-color: var(--danger-color);
+}

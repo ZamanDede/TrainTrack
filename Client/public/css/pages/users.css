@@ -1,0 +1,68 @@
+@import url('../global.css'); /* Link to the global CSS */
+
+/* Table Styles */
+.table {
+    background-color: var(--secondary-color);
+    border: 2px solid var(--primary-color); /* Thicker border for the table */
+    color: var(--text-color);
+}
+
+.table thead {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border-bottom: 2px solid var(--accent-color); /* Thicker border between the header and body */
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: var(--background-color);
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: var(--secondary-color);
+}
+
+.table-bordered {
+    border: 2px solid var(--primary-color); /* Thicker border for the table */
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 2px solid var(--primary-color); /* Thicker borders between cells */
+}
+
+/* Form Styles */
+.form-control {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 2px solid var(--primary-color); /* Thicker border for form controls */
+}
+
+.form-control:focus {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 5px rgba(10, 171, 142, 0.5);
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: var(--primary-color);
+    border: 2px solid var(--primary-color); /* Thicker border for primary buttons */
+    color: var(--white-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-color);
+    color: var(--white-color);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    border: 2px solid var(--danger-color); /* Thicker border for danger buttons */
+    color: var(--white-color);
+}
+
+.btn-danger:hover {
+    background-color: darken(var(--danger-color), 10%);
+    color: var(--white-color);
+}

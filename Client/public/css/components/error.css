@@ -1,0 +1,29 @@
+@import url('../global.css'); /* Link to the global CSS */
+
+/* Error Component Styles */
+#error-box {
+    background-color: var(--danger-color); /* Use the danger color for the background */
+    color: var(--white-color); /* White text color for contrast */
+    border: 1px solid darken(var(--danger-color), 10%); /* Slightly darker border for emphasis */
+    border-radius: 5px; /* Rounded corners */
+    padding: 15px; /* Padding inside the alert box */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    margin-bottom: 20px; /* Space below the error box */
+    transition: opacity 0.5s ease; /* Smooth transition for hiding the error */
+}
+
+#error-box h4 {
+    color: var(--white-color); /* White color for the heading */
+    margin-bottom: 10px; /* Space below the heading */
+}
+
+#error-box p {
+    color: var(--white-color); /* White color for the error message text */
+    margin: 0; /* Remove default margins */
+}
+
+/* Automatically hide the error message */
+.hidden {
+    opacity: 0; /* Transition effect for hiding the error box */
+    visibility: hidden; /* Make the error box invisible */
+}
