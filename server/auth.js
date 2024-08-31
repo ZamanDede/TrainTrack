@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 
-// Middleware to authenticate JWT and set user in res.locals
+// Middleware to authenticate JWT
 const authenticateJWT = (req, res, next) => {
-  const token = req.cookies.token;  // Assuming JWT is stored in cookies
+  const token = req.cookies.token;
 
   if (token) {
     try {
@@ -14,7 +14,7 @@ const authenticateJWT = (req, res, next) => {
       }
 
       const decoded = jwt.verify(token, secretKey);
-      res.locals.user = decoded;  // Pass user info to the views
+      res.locals.user = decoded;
     } catch (err) {
       console.error('Invalid token:', err);
       res.locals.user = null;
@@ -31,7 +31,7 @@ function generateJWT(user) {
   return jwt.sign(
     { id: user.id, username: user.username, email: user.email, userType: user.user_type },
     secretKey,
-    { expiresIn: '1h' }  // Token expires in 1 hour
+    { expiresIn: '1h' }
   );
 }
 
@@ -43,7 +43,7 @@ function ensureAuthenticated(req, res, next, redirectUrl = '/users/login', error
     return res.redirect(`${redirectUrl}?error=${encodeURIComponent(errorMessage)}`);
   }
 
-  next();  // Proceed to the next middleware/route handler if the user is authenticated
+  next();
 }
 
 // Middleware to ensure the user is either premium or admin
@@ -57,7 +57,7 @@ function ensurePremiumOrAdmin(req, res, next, deniedErrorMessage = "Access denie
     });
   }
 
-  next();  // Proceed if the user is premium or admin
+  next();
 }
 
 // Middleware to ensure the user is an admin
@@ -68,12 +68,12 @@ function ensureAdmin(req, res, next) {
     return res.status(403).json({ error: "Access denied. Admins only." });
   }
 
-  next();  // Proceed if the user is an admin
+  next();
 }
 
 module.exports = {
   authenticateJWT,
-  generateJWT,  // Export the generateJWT function
+  generateJWT,
   ensureAuthenticated,
   ensurePremiumOrAdmin,
   ensureAdmin

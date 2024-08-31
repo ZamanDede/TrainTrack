@@ -1,14 +1,14 @@
 const { Pool } = require('pg');
 const dotenv = require('dotenv');
 
-dotenv.config();  // Load environment variables from .env
+dotenv.config();  // Load environment variables
 
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_DATABASE,
-  password: String(process.env.DB_PASSWORD),  // Explicitly convert to string
-  port: parseInt(process.env.DB_PORT, 10),  // Ensure port is an integer
+  password: String(process.env.DB_PASSWORD),
+  port: parseInt(process.env.DB_PORT, 10),
 });
 
 

@@ -26,7 +26,7 @@ label_mapping = {row['filename']: row['label'] for index, row in train_labels.it
 class_indices = {label: idx for idx, label in enumerate(train_labels['label'].unique())}
 
 # Define a function to process images and map them to labels
-def load_and_preprocess_image(filename, label, target_size=(68, 68)):
+def load_and_preprocess_image(filename, label, target_size=(75,75)):
     img = load_img(os.path.join(train_dir, filename), target_size=target_size)
     img = img_to_array(img)
     label_encoded = tf.keras.utils.to_categorical(class_indices[label], num_classes=len(class_indices))
@@ -47,7 +47,7 @@ X_train = np.array(X_train)
 y_train = np.array(y_train)
 
 # Load the base model (EfficientNetB0)
-base_model = EfficientNetB0(weights='imagenet', include_top=False, input_shape=(68, 68, 3))
+base_model = EfficientNetB0(weights='imagenet', include_top=False, input_shape=(75,75, 3))
 
 # Unfreeze the last few layers of the base model
 for layer in base_model.layers[-20:]:
@@ -57,7 +57,7 @@ for layer in base_model.layers[-20:]:
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
 x = Dense(1024, activation='relu')(x)
-predictions = Dense(len(train_labels['label'].unique()), activation='softmax')(x)  # Adjust output layer to match the number of classes
+predictions = Dense(len(train_labels['label'].unique()), activation='softmax')(x)
 
 # Create the model
 model = Model(inputs=base_model.input, outputs=predictions)
@@ -70,8 +70,8 @@ model.compile(optimizer=tf.keras.optimizers.Adam(),
 # Train the model without validation
 history = model.fit(
     X_train, y_train,
-    epochs=3,  # Adjust the number of epochs as needed
-    batch_size=32  # Adjust the batch size as needed
+    epochs=5,
+    batch_size=32
 )
 
 # Save the training history as a PNG image

@@ -8,7 +8,6 @@ CREATE TABLE users (
     CHECK (user_type IN ('admin', 'premium', 'regular'))
 );
 
--- Indexes for `users` table
 CREATE UNIQUE INDEX users_email_key ON users(email);
 CREATE UNIQUE INDEX users_username_key ON users(username);
 
@@ -20,5 +19,4 @@ CREATE TABLE datasets (
     info JSONB
 );
 
--- Indexes for `datasets` table
 CREATE INDEX datasets_pkey ON datasets(id);

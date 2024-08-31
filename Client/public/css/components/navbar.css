@@ -2,60 +2,56 @@
 
 /* Navbar Styles */
 .navbar {
-    background-color: var(--primary-color); /* Darker color for the navbar background */
+    background-color: var(--primary-color);
 }
 
 .navbar-brand {
-    color: var(--accent-color); /* Use the accent color for the brand name */
+    color: var(--accent-color);
     font-weight: bold;
 }
 
 .navbar-brand:hover {
-    color: var(--white-color); /* Change to white on hover */
+    color: var(--white-color);
 }
 
 .navbar-nav .nav-link {
-    color: var(--white-color); /* Use white for nav links */
+    color: var(--white-color);
 }
 
 .navbar-nav .nav-link:hover {
-    color: var(--accent-color); /* Change to accent color on hover */
+    color: var(--accent-color);
 }
 
 .navbar-toggler {
-    border-color: var(--accent-color); /* Use the accent color for the toggler border */
+    border-color: var(--accent-color);
 }
 
-.navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-    /* Use a custom icon color that matches the theme */
-}
 
 .navbar-collapse {
-    justify-content: flex-end; /* Align the right-aligned links correctly */
+    justify-content: flex-end;
 }
 
 .navbar-nav.mr-auto {
-    margin-right: auto; /* Align the left-aligned links correctly */
+    margin-right: auto;
 }
 
 .navbar-light .navbar-toggler {
-    background-color: var(--accent-color); /* Use the accent color for the toggler background */
-    color: var(--white-color); /* White color for the toggler text/icon */
+    background-color: var(--accent-color);
+    color: var(--white-color);
 }
 
 .navbar-light .navbar-toggler:hover {
-    background-color: var(--secondary-color); /* Change to secondary color on hover */
+    background-color: var(--secondary-color);
 }
 
 .nav-item .active {
-    border-bottom: 2px solid var(--accent-color); /* Indicate the active page with a border */
+    border-bottom: 2px solid var(--accent-color);
 }
 
 .nav-item .nav-link.active {
-    color: var(--accent-color); /* Active link color */
+    color: var(--accent-color);
 }
 
 .nav-item .nav-link.active:hover {
-    color: var(--white-color); /* Active link hover color */
+    color: var(--white-color);
 }

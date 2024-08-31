@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import tensorflow as tf
+import seaborn
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve, auc
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
@@ -25,7 +26,7 @@ label_mapping = {row['filename']: row['label'] for index, row in train_labels.it
 class_indices = {label: idx for idx, label in enumerate(train_labels['label'].unique())}
 
 # Define a function to process images and map them to labels
-def load_and_preprocess_image(filename, label, target_size=(68, 68)):
+def load_and_preprocess_image(filename, label, target_size=(75,75)):
     img = load_img(os.path.join(train_dir, filename), target_size=target_size)
     img = img_to_array(img)
     label_encoded = tf.keras.utils.to_categorical(class_indices[label], num_classes=len(class_indices))
@@ -53,40 +54,21 @@ y_pred = model.predict(X_train)
 y_pred_classes = np.argmax(y_pred, axis=1)
 y_true_classes = np.argmax(y_train, axis=1)
 
-# Compute the confusion matrix
-cm = confusion_matrix(y_true_classes, y_pred_classes)
 
-# Plot Confusion Matrix with improved readability
-plt.figure(figsize=(12, 10))  # Increase figure size
-disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=list(class_indices.keys()))
-disp.plot(cmap=plt.cm.Blues)
+# Parts to change
+from sklearn.metrics import precision_recall_curve, average_precision_score
 
-# Adjustments for readability
-plt.xticks(rotation=45, ha='right', fontsize=10)  # Rotate x-axis labels and adjust font size
-plt.yticks(fontsize=10)  # Adjust font size of y-axis labels
-plt.title('Confusion Matrix', fontsize=15)
-plt.xlabel('Predicted Label', fontsize=12)
-plt.ylabel('True Label', fontsize=12)
-plt.tight_layout()  # Adjust layout to prevent clipping
-plt.savefig('confusion_matrix.png')
+# Aggregate Precision-Recall Curve
+y_train_reshaped = y_train.ravel()
+y_pred_reshaped = y_pred.ravel()
+precision, recall, _ = precision_recall_curve(y_train_reshaped, y_pred_reshaped)
+average_precision = average_precision_score(y_train, y_pred, average="micro")
 
-# Plot ROC Curve and AUC for each class
-fpr = {}
-tpr = {}
-roc_auc = {}
-
-plt.figure(figsize=(10, 8))
-
-for i in range(len(class_indices)):
-    fpr[i], tpr[i], _ = roc_curve(y_train[:, i], y_pred[:, i])
-    roc_auc[i] = auc(fpr[i], tpr[i])
-    plt.plot(fpr[i], tpr[i], label=f'Class {i} (AUC = {roc_auc[i]:.2f})')
-
-plt.plot([0, 1], [0, 1], 'k--')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Receiver Operating Characteristic (ROC) Curve')
-plt.legend(loc='lower right')
-plt.savefig('roc_curve.png')
+# Plot Average Precision-Recall Curve
+plt.figure(figsize=(10, 6))
+plt.plot(recall, precision, label=f'Precision-Recall Curve (AP = {average_precision:.2f})', color='green')
+plt.xlabel('Recall')
+plt.ylabel('Precision')
+plt.title('Overall Precision-Recall Curve')
+plt.legend(loc='lower left')
+plt.savefig('precision_recall_curve.png')

@@ -1,21 +1,21 @@
 /* Carousel Customization */
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-    filter: none; /* Remove the dark filter */
-    background-color: var(--primary-color); /* Set to primary color */
+    filter: none;
+    background-color: var(--primary-color);
     border-radius: 50%;
     width: 1.5rem;
     height: 1.5rem;
 }
 
 .carousel-indicators {
-    bottom: -1.5rem; /* Move indicators below the carousel */
+    bottom: -1.5rem;
     background-color: transparent;
 }
 
 .carousel-indicators li {
-    background-color: transparent; /* Make indicators transparent */
-    border: 0.1rem solid var(--accent-color); /* Outline with accent color */
+    background-color: transparent;
+    border: 0.1rem solid var(--accent-color);
 }
 
 .carousel-item img {
@@ -27,10 +27,10 @@
 .training-section,
 .metrics-section,
 .model-visuals {
-    background-color: var(--secondary-color); /* Different background for each section */
+    background-color: var(--secondary-color);
     border-radius: 0.5rem;
-    padding: 2rem; /* Relative padding */
-    margin-bottom: 2rem; /* Relative separation between sections */
+    padding: 2rem;
+    margin-bottom: 2rem;
 }
 
 .model-header {
@@ -40,63 +40,59 @@
 
 pre {
     background-color: var(--secondary-color);
-    color: var(--white-color); /* Metrics text in white */
+    color: var(--white-color);
     padding: 1.5rem;
     border-radius: 0.5rem;
 }
 
-/* Table Styling */
 .table-bordered th, .table-bordered td {
     border-color: var(--primary-color);
     padding: 1rem;
 }
 
-/* Training Button Customization */
 .training-section {
     display: flex;
     flex-direction: column;
-    gap: 1rem; /* Add space between items */
+    gap: 1rem;
 }
 
 
-/* Table Styling */
 .table-bordered {
-    border: 0.2rem solid var(--primary-color); /* Thicker outer border */
+    border: 0.2rem solid var(--primary-color);
 }
 
 .table-bordered th, .table-bordered td {
-    border-color: var(--primary-color); /* Thicker inner borders */
+    border-color: var(--primary-color);
     padding: 1rem;
-    color: var(--white-color); /* Make table text white */
-    background-color: transparent; /* Ensure background is transparent to avoid color conflicts */
+    color: var(--white-color);
+    background-color: transparent;
 }
 
 .table thead th {
-    border-bottom: 0.2rem solid var(--primary-color); /* Thicker border for table header */
-    color: var(--white-color); /* White text in the header */
+    border-bottom: 0.2rem solid var(--primary-color);
+    color: var(--white-color);
 }
 
 
-/* Training Button Customization */
 .inline-form {
     display: inline-block;
-    width: 38%; /* Make both forms take up 48% of the container width */
+    width: 38%;
 }
 
 button {
-    width: 80%; /* Make the button fill the width of the form */
-    background-color: var(--primary-color); /* Use the primary color */
-    color: var(--white-color); /* Use the white color for text */
+    width: 80%;
+    background-color: var(--primary-color);
+    color: var(--white-color);
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;
-    text-align: center; /* Ensure text is centered */
+    text-align: center;
 }
 
 button:hover {
-    background-color: var(--accent-color); /* Change to accent color on hover */
+    background-color: var(--accent-color);
 }
 
 button:disabled {
-    background-color: var(--danger-color); /* Use the danger color when disabled */
+    background-color: var(--danger-color);
 }

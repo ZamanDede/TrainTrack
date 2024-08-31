@@ -2,28 +2,27 @@
 
 /* Error Component Styles */
 #error-box {
-    background-color: var(--danger-color); /* Use the danger color for the background */
-    color: var(--white-color); /* White text color for contrast */
-    border: 1px solid darken(var(--danger-color), 10%); /* Slightly darker border for emphasis */
-    border-radius: 5px; /* Rounded corners */
-    padding: 15px; /* Padding inside the alert box */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-    margin-bottom: 20px; /* Space below the error box */
-    transition: opacity 0.5s ease; /* Smooth transition for hiding the error */
+    background-color: var(--danger-color);
+    color: var(--white-color);
+    border: 1px solid darken(var(--danger-color), 10%);
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    transition: opacity 0.5s ease;
 }
 
 #error-box h4 {
-    color: var(--white-color); /* White color for the heading */
-    margin-bottom: 10px; /* Space below the heading */
+    color: var(--white-color);
+    margin-bottom: 10px;
 }
 
 #error-box p {
-    color: var(--white-color); /* White color for the error message text */
-    margin: 0; /* Remove default margins */
+    color: var(--white-color);
+    margin: 0;
 }
 
-/* Automatically hide the error message */
 .hidden {
-    opacity: 0; /* Transition effect for hiding the error box */
-    visibility: hidden; /* Make the error box invisible */
+    opacity: 0;
+    visibility: hidden;
 }

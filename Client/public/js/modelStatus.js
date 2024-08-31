@@ -4,7 +4,7 @@ let timerInterval;
 // Function to start the timer
 function startTimer() {
     startTime = Date.now();
-    timerInterval = setInterval(updateTimer, 1000); // Update every second
+    timerInterval = setInterval(updateTimer, 1000);
 }
 
 // Function to stop the timer
@@ -36,20 +36,20 @@ function checkStatus(modelId) {
                 statusElement.innerText = 'Status: Running...';
                 visualizeButton.disabled = true;
                 if (!timerInterval) {
-                    startTimer(); // Start the timer if it hasn't started yet
+                    startTimer();
                 }
             } else if (status === 'finished') {
                 statusElement.innerText = 'Status: Finished';
                 visualizeButton.disabled = false;
-                stopTimer(); // Stop the timer when the process is finished
+                stopTimer();
             } else if (status === 'error') {
                 statusElement.innerText = 'Status: Error Occurred';
                 visualizeButton.disabled = true;
-                stopTimer(); // Stop the timer if an error occurs
+                stopTimer();
             } else {
                 statusElement.innerText = 'Status: Not Started';
                 visualizeButton.disabled = true;
-                stopTimer(); // Ensure the timer is stopped if the status resets
+                stopTimer();
             }
         });
 }
@@ -57,13 +57,13 @@ function checkStatus(modelId) {
 // Event listener for the train form submission
 document.getElementById('trainForm').addEventListener('submit', function () {
     document.getElementById('training-status').innerText = 'Status: Running...';
-    startTimer(); // Start the timer when training starts
-    checkStatus(modelId); // Check the status immediately after starting
+    startTimer();
+    checkStatus(modelId);
 });
 
 // Event listener for the visualize form submission
 document.getElementById('visualizeForm').addEventListener('submit', function () {
     document.getElementById('training-status').innerText = 'Status: Running...';
-    startTimer(); // Start the timer when visualization starts
-    checkStatus(modelId); // Check the status immediately after starting
+    startTimer();
+    checkStatus(modelId);
 });

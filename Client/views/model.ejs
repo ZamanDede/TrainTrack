@@ -118,7 +118,7 @@
             <h3>Metrics</h3>
             <% if (model.metrics && model.metrics.length) { %>
                 <% model.metrics.forEach(metric=> { %>
-                    <pre><%= metric.content %></pre> <!-- Display metrics file content -->
+                    <pre><%= metric.content %></pre>
                     <% }); %>
                         <% } else { %>
                             <p>No metrics available.</p>
@@ -158,5 +158,5 @@
     <script>
         var modelId = '<%= model.id %>';
         checkStatus(modelId);
-        setInterval(function () { checkStatus(modelId); }, 2000); // Check every 2 seconds
+        setInterval(function () { checkStatus(modelId); }, 2000);
     </script>

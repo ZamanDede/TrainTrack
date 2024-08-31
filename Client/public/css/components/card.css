@@ -4,20 +4,20 @@
 .card {
     background-color: var(--secondary-color);
     border: 1px solid var(--primary-color);
-    border-radius: 10px; /* Slightly more rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slightly deeper shadow */
-    overflow: hidden; /* Ensures content stays within the card bounds */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px); /* Lifts the card slightly on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Deeper shadow on hover */
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 .card-img-top {
-    border-bottom: 1px solid var(--primary-color); /* Adds a border between the image and body */
-    border-radius: 10px 10px 0 0; /* Matches the card's rounded corners */
+    border-bottom: 1px solid var(--primary-color);
+    border-radius: 10px 10px 0 0;
     height: 200px;
     object-fit: cover;
 }
@@ -28,7 +28,7 @@
 
 .card-title {
     color: var(--accent-color);
-    font-size: 1.25em; /* Slightly larger title font */
+    font-size: 1.25em;
     margin-bottom: 15px;
 }
 

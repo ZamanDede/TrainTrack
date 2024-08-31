@@ -9,7 +9,7 @@
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     margin-bottom: 30px;
-    overflow: hidden; /* Ensure no overflow */
+    overflow: hidden;
 }
 
 /* Form Controls in Search and Sort */
@@ -32,8 +32,8 @@
     background-color: var(--primary-color);
     border: none;
     color: var(--white-color);
-    padding: 10px 15px; /* Adjust padding to match input height */
-    height: 38px; /* Match the height of the input field */
+    padding: 10px 15px;
+    height: 38px;
     display: flex;
     align-items: center;
 }

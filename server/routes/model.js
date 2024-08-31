@@ -3,9 +3,10 @@ const fs = require('fs');
 const path = require('path');
 const router = express.Router();
 const { exec } = require('child_process');
-const { ensureAuthenticated, ensurePremiumOrAdmin } = require('../auth');  // Use the updated auth.js functions
+const { ensureAuthenticated, ensurePremiumOrAdmin } = require('../auth');
 
-let modelStatus = {}; // This object will track the status of each model by ID
+let modelStatus = {};
+
 
 // Function to get model metrics
 function getModelMetrics(modelId) {
@@ -109,7 +110,7 @@ router.post('/:modelId/execute', ensureAuthenticated, ensurePremiumOrAdmin, (req
   }
 
   const scriptPath = path.join(__dirname, '../uploads/ml-models', modelId, scriptName);
-  const pythonPath = path.join(__dirname, '../uploads/ml-models/venv/bin/python3'); // Path to your virtual environment's Python
+  const pythonPath = path.join(__dirname, '../uploads/ml-models/venv/bin/python3');
 
   // Set status to 'running'
   modelStatus[modelId] = 'running';
@@ -118,11 +119,11 @@ router.post('/:modelId/execute', ensureAuthenticated, ensurePremiumOrAdmin, (req
     exec(`${pythonPath} ${scriptPath}`, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error executing script: ${stderr}`);
-        modelStatus[modelId] = 'error'; // Set status to 'error' if the script fails
+        modelStatus[modelId] = 'error';
         return res.status(500).json({ error: 'Error executing script', details: stderr });
       }
       console.log(`Script output: ${stdout}`);
-      modelStatus[modelId] = 'finished'; // Set status to 'finished' when done
+      modelStatus[modelId] = 'finished';
       res.redirect(`/models/${modelId}`);
     });
   } else {

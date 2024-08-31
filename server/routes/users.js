@@ -25,7 +25,7 @@ router.post('/register', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     await pool.query('INSERT INTO users (username, email, password_hash, user_type) VALUES ($1, $2, $3, $4)',
-      [username, email, hashedPassword, 'regular']);  // Default user type is 'regular'
+      [username, email, hashedPassword, 'regular']);
 
     // Redirect to login page after successful registration
     res.redirect('/users/login');
@@ -65,13 +65,10 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    // Generate JWT using the centralized function
     const token = generateJWT(user.rows[0]);
 
-    // Send the JWT as a cookie
     res.cookie('token', token, { httpOnly: true });
 
-    // Redirect to home page after successful login
     res.redirect('/');
   } catch (err) {
     console.error('Error logging in user:', err);
@@ -84,12 +81,12 @@ router.post('/login', async (req, res) => {
 
 // Serve the registration form
 router.get('/register', (req, res) => {
-  res.render('register', { title: 'Register', error: null }); // Ensure error is defined
+  res.render('register', { title: 'Register', error: null });
 });
 
 // Serve the login form
 router.get('/login', (req, res) => {
-  const errorMessage = req.query.error || null;  // Get error message from query parameter if it exists
+  const errorMessage = req.query.error || null;
   res.render('login', { title: 'Login', error: errorMessage });
 });
 
@@ -119,8 +116,8 @@ router.get('/list', ensureAuthenticated, ensureAdmin, async (req, res) => {
 
 // Logout Route
 router.get('/logout', (req, res) => {
-  res.clearCookie('token', { path: '/' });  // Clear the JWT cookie
-  res.redirect('/users/login');  // Redirect to the login page after logout
+  res.clearCookie('token', { path: '/' });
+  res.redirect('/users/login');
 });
 
 // Delete User (Admin Only)
@@ -129,7 +126,7 @@ router.post('/delete/:id', ensureAuthenticated, ensureAdmin, async (req, res) =>
 
   try {
     await pool.query('DELETE FROM users WHERE id = $1', [id]);
-    res.redirect('/users/list');  // Redirect to the user list after deletion
+    res.redirect('/users/list');
   } catch (err) {
     console.error('Error deleting user:', err);
     res.status(500).json({ error: 'Failed to delete user' });
@@ -148,7 +145,7 @@ router.post('/changeType/:id', ensureAuthenticated, ensureAdmin, async (req, res
 
   try {
     await pool.query('UPDATE users SET user_type = $1 WHERE id = $2', [user_type, id]);
-    res.redirect('/users/list');  // Redirect to the user list after updating the user type
+    res.redirect('/users/list');
   } catch (err) {
     console.error('Error changing user type:', err);
     res.status(500).json({ error: 'Failed to change user type' });

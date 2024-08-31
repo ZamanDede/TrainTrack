@@ -105,7 +105,6 @@
               </div>
 
               <% if (user && user.userType==='admin' ) { %>
-                <!-- Delete button or X mark for admins -->
                 <form action="/datasets/<%= dataset.id %>/delete" method="POST" class="delete-form">
                   <button type="submit" class="btn btn-danger btn-sm position-absolute" style="top: 10px; right: 10px;">
                     &times;
@@ -118,5 +117,4 @@
     </div>
   </div>
 
-  <!-- Include the external JavaScript file -->
   <script src="/js/datasetPresentation.js"></script>

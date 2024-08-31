@@ -1,7 +1,7 @@
 # Use an official Ubuntu 24.04 as a parent image
 FROM ubuntu:24.04
 
-# Install Node.js, Python, and other dependencies, including BLAS/LAPACK
+# Install Node.js, Python, and other dependencies
 RUN apt-get update && apt-get install -y \
     nodejs \
     npm \

@@ -5,7 +5,7 @@ const path = require('path');
 const router = express.Router();
 const pool = require('../db');
 const unzipper = require('unzipper');
-const { ensureAuthenticated, ensurePremiumOrAdmin, ensureAdmin } = require('../auth'); // Import necessary middlewares
+const { ensureAuthenticated, ensurePremiumOrAdmin, ensureAdmin } = require('../auth');
 
 // Function to get dataset info from the database
 async function getDatasetInfo(datasetId) {
@@ -29,14 +29,14 @@ async function getAllDatasets() {
       const datasetId = row.id;
       const datasetPath = path.join('uploads/datasets', String(datasetId), 'cover.jpg');
       const imageUrl = fs.existsSync(path.join(__dirname, '../', datasetPath))
-        ? `/${datasetPath}`  // Use the actual image if it exists
-        : '/img/default.jpg';  // Use the default image if the cover.jpg doesn't exist
+        ? `/${datasetPath}`
+        : '/img/default.jpg';
 
       return {
         id: datasetId,
         task_type: row.info.task_type,
         ...row.info,
-        imageUrl: imageUrl  // Set the imageUrl to the correct value
+        imageUrl: imageUrl
       };
     });
   } catch (err) {
@@ -68,7 +68,7 @@ router.get('/:datasetId/info', ensureAuthenticated, async (req, res) => {
 function deleteDatasetDirectory(datasetId) {
   const datasetPath = path.join(__dirname, '../uploads/datasets', String(datasetId));
   if (fs.existsSync(datasetPath)) {
-    fs.rmSync(datasetPath, { recursive: true, force: true });  // Remove the directory and its contents
+    fs.rmSync(datasetPath, { recursive: true, force: true });
   }
 }
 
@@ -77,13 +77,10 @@ router.post('/:datasetId/delete', ensureAuthenticated, ensureAdmin, async (req, 
   const datasetId = req.params.datasetId;
 
   try {
-    // Delete the dataset from the database
     await pool.query('DELETE FROM datasets WHERE id = $1', [datasetId]);
 
-    // Remove the dataset directory from the file system
     deleteDatasetDirectory(datasetId);
 
-    // Redirect to the datasets page after successful deletion
     res.redirect('/datasets');
   } catch (err) {
     console.error('Error deleting dataset:', err);
@@ -92,16 +89,14 @@ router.post('/:datasetId/delete', ensureAuthenticated, ensureAdmin, async (req, 
 });
 
 
-// Routes we are working on
-
-// Set up multer with memory storage and file limits
+// Set up multer with memory storage and file limits (Got help from GPT to implement this part)
 const storage = multer.memoryStorage();
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 2 * 1024 * 1024 * 1024 },  // Set file size limit to 2GB
+    limits: { fileSize: 2 * 1024 * 1024 * 1024 },
 }).fields([
-    { name: 'zipFile', maxCount: 1 },  // Expect a single ZIP file
-    { name: 'image', maxCount: 1 }     // Optional image file
+    { name: 'zipFile', maxCount: 1 },
+    { name: 'image', maxCount: 1 }
 ]);
 
 // Route to render the dataset upload form (Requires premium or admin access)
@@ -142,7 +137,7 @@ router.post('/upload', ensureAuthenticated, ensurePremiumOrAdmin, upload, async 
 
         // Create the new directory with the datasetId as its name using relative path
         const datasetPath = path.join('uploads/datasets', String(datasetId));
-        const absoluteDatasetPath = path.join(__dirname, '../', datasetPath);  // Convert to absolute path for file operations
+        const absoluteDatasetPath = path.join(__dirname, '../', datasetPath);
         if (!fs.existsSync(absoluteDatasetPath)) {
             fs.mkdirSync(absoluteDatasetPath, { recursive: true });
         }
@@ -156,7 +151,7 @@ router.post('/upload', ensureAuthenticated, ensurePremiumOrAdmin, upload, async 
         // Save the uploaded image as cover.jpg if it exists
         if (req.files['image']) {
             const image = req.files['image'][0];
-            const imagePath = path.join(absoluteDatasetPath, 'cover.jpg');  // Save image as cover.jpg
+            const imagePath = path.join(absoluteDatasetPath, 'cover.jpg');
             fs.writeFileSync(imagePath, image.buffer);
         }
 

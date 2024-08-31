@@ -3,10 +3,10 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const pool = require('./db');  // Import the database pool from db.js
-const { authenticateJWT, ensureAuthenticated, ensurePremiumOrAdmin, ensureAdmin } = require('./auth');  // Import all middleware functions
+const pool = require('./db');
+const { authenticateJWT, ensureAuthenticated, ensurePremiumOrAdmin, ensureAdmin } = require('./auth');
 
-// Load environment variables from .env file
+// Load environment variables
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const app = express();
@@ -17,14 +17,13 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../Client/views'));
 
 // Middleware setup
-app.use(bodyParser.json());  // Parse JSON bodies
-app.use(bodyParser.urlencoded({ extended: true }));  // Parse URL-encoded bodies
-app.use(cookieParser());  // Parse cookies
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-// Serve static files from the "public" directory
+// Serve static files
 app.use(express.static(path.join(__dirname, '../Client/public')));
-
-// Serve static files from the "uploads" directory
+// Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Middleware to log requests
@@ -47,7 +46,7 @@ const userRoutes = require('./routes/users');
 const modelRoutes = require('./routes/model');
 const datasetRoutes = require('./routes/dataset');
 
-// Apply the authentication middleware to relevant routes
+// Apply the authentication middleware
 app.use("/users", userRoutes);
 app.use("/models", modelRoutes);
 app.use("/datasets", datasetRoutes);
@@ -55,29 +54,11 @@ app.use("/datasets", datasetRoutes);
 
 // Route for the home page
 app.get('/', (req, res) => {
-  const errorMessage = req.query.error;  // Get error message from query parameter
+  const errorMessage = req.query.error;
   res.render('index', { title: 'Home', error: errorMessage });
 });
 
-// Test DB connection route
-app.get('/test-db', async (req, res) => {
-  try {
-    console.log('DB_USER:', process.env.DB_USER);
-    console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
-    console.log('DB_HOST:', process.env.DB_HOST);
-    console.log('DB_DATABASE:', process.env.DB_DATABASE);
-
-    const client = await pool.connect();
-    const result = await client.query('SELECT NOW()');
-    client.release();
-    res.send(`Database connected: ${result.rows[0].now}`);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error connecting to the database');
-  }
-});
-
-// Catch-all route to handle any other requests
+// Catch-all route
 app.use((req, res) => {
   console.log(`Route not found: ${req.originalUrl}`);
   res.status(404).send('Not Found');

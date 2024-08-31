@@ -4,17 +4,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchButton');
 
-    let originalDatasets = []; // To store the original datasets
-    let currentDatasets = [];  // To store the currently filtered and sorted datasets
+    let originalDatasets = [];
+    let currentDatasets = [];
 
     // Function to initialize datasets (called once on load)
     function initializeDatasets() {
         originalDatasets = Array.from(datasetContainer.getElementsByClassName('dataset-card'));
-        currentDatasets = [...originalDatasets]; // Initial copy
-        // Apply initial sort (A-Z by heading)
-        sortBySelect.value = 'headingAsc'; // Set the initial sort value
-        applySort(); // Sort the datasets initially
-        updateDatasetContainer(); // Update the container with the sorted datasets
+        currentDatasets = [...originalDatasets];
+        sortBySelect.value = 'headingAsc';
+        applySort();
+        updateDatasetContainer();
     }
 
 
@@ -49,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 case 'license':
                     fieldToSearch = dataset.getAttribute('data-license').toLowerCase();
                     break;
-                default: // General search
+                default:
                     const heading = dataset.getAttribute('data-heading').toLowerCase();
                     const author = dataset.getAttribute('data-author').toLowerCase();
                     const description = dataset.getAttribute('data-description').toLowerCase();
@@ -90,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Event listener for the search button
     searchButton.addEventListener('click', function () {
-        currentDatasets = [...originalDatasets]; // Reset to original datasets before each search
+        currentDatasets = [...originalDatasets];
         applySearch(searchInput.value);
         applySort();
         updateDatasetContainer();
@@ -102,6 +101,5 @@ document.addEventListener('DOMContentLoaded', function () {
         updateDatasetContainer();
     });
 
-    // Initialize datasets on page load
     initializeDatasets();
 });
