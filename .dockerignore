@@ -1,0 +1,22 @@
+# Ignore node_modules directory
+node_modules
+
+# Ignore Docker Compose and Dockerfile
+docker-compose.yml
+Dockerfile
+
+# Ignore logs, temporary files, and other unneeded files
+npm-debug.log
+*.log
+*.tmp
+*.swp
+*.bak
+
+# Ignore Git files and directories
+.git
+.gitignore
+.dockerignore
+
+# Ignore OS-generated files
+.DS_Store
+Thumbs.db

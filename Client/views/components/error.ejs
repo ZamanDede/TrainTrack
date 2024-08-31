@@ -4,15 +4,16 @@
 
 <div id="error-box" class="alert alert-danger" role="alert">
   <h4 class="alert-heading">Error</h4>
-  <p><%= errorMessage %></p>
+  <p>
+    <%= errorMessage %>
+  </p>
 </div>
 
 <script>
-  // Automatically hide the error message after 5 seconds
-  setTimeout(function() {
+  setTimeout(function () {
     var errorBox = document.getElementById('error-box');
     if (errorBox) {
       errorBox.style.display = 'none';
     }
-  }, 4000); // 5000 milliseconds = 5 seconds
+  }, 4000);
 </script>

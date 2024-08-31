@@ -13,10 +13,10 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
 # Load the dataset paths
-train_dir = '../../datasets/34/train'  # Path to the training set
+train_dir = '../../datasets/3/train'  # Path to the training set
 
 # Load the training CSV file
-train_csv_path = '../../datasets/34/Training_set.csv'
+train_csv_path = '../../datasets/3/Training_set.csv'
 train_labels = pd.read_csv(train_csv_path)
 
 # Create a dictionary to map filenames to their labels
@@ -26,7 +26,7 @@ label_mapping = {row['filename']: row['label'] for index, row in train_labels.it
 class_indices = {label: idx for idx, label in enumerate(train_labels['label'].unique())}
 
 # Define a function to process images and map them to labels
-def load_and_preprocess_image(filename, label, target_size=(32, 32)):
+def load_and_preprocess_image(filename, label, target_size=(68, 68)):
     img = load_img(os.path.join(train_dir, filename), target_size=target_size)
     img = img_to_array(img)
     label_encoded = tf.keras.utils.to_categorical(class_indices[label], num_classes=len(class_indices))
@@ -47,7 +47,7 @@ X_train = np.array(X_train)
 y_train = np.array(y_train)
 
 # Load the base model (EfficientNetB0)
-base_model = EfficientNetB0(weights='imagenet', include_top=False, input_shape=(32, 32, 3))
+base_model = EfficientNetB0(weights='imagenet', include_top=False, input_shape=(68, 68, 3))
 
 # Unfreeze the last few layers of the base model
 for layer in base_model.layers[-20:]:
@@ -71,7 +71,7 @@ model.compile(optimizer=tf.keras.optimizers.Adam(),
 history = model.fit(
     X_train, y_train,
     epochs=3,  # Adjust the number of epochs as needed
-    batch_size=8  # Adjust the batch size as needed
+    batch_size=32  # Adjust the batch size as needed
 )
 
 # Save the training history as a PNG image

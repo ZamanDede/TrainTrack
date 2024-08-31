@@ -47,12 +47,6 @@ button:hover {
     background-color: var(--accent-color);
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
 .card {
     background-color: var(--secondary-color);
     border: 1px solid var(--primary-color);

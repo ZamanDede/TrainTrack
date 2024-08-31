@@ -1,8 +1,9 @@
 {
   "name": "traintrack",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server/app.js",
   "scripts": {
+    "start": "node server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -25,12 +26,5 @@
     "path": "^0.12.7",
     "pg": "^8.12.0",
     "unzipper": "^0.12.3"
-  },
-  "devDependencies": {
-    "rollup": "^4.21.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-svelte": "^7.2.2",
-    "svelte": "^4.2.18"
   }
 }

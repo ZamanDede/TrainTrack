@@ -1,31 +1,40 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
-const pool = require('../db');  // Import the database pool
-const { generateJWT, ensureAuthenticated, ensureAdmin } = require('../auth');  // Import the necessary functions from auth.js
+const pool = require('../db');
+const { generateJWT, ensureAuthenticated, ensureAdmin } = require('../auth');
 
 // User Registration
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
-    return res.status(400).json({ error: true, message: 'Request body incomplete, username, email, and password are required' });
+    return res.render('register', {
+      title: 'Register',
+      error: 'All fields are required.'
+    });
   }
 
   try {
     const existingUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     if (existingUser.rows.length > 0) {
-      return res.status(409).json({ error: true, message: 'User already exists' });
+      return res.render('register', {
+        title: 'Register',
+        error: 'User already exists'
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     await pool.query('INSERT INTO users (username, email, password_hash, user_type) VALUES ($1, $2, $3, $4)',
-                     [username, email, hashedPassword, 'regular']);  // Default user type is 'regular'
+      [username, email, hashedPassword, 'regular']);  // Default user type is 'regular'
 
     // Redirect to login page after successful registration
     res.redirect('/users/login');
   } catch (err) {
     console.error('Error registering user:', err);
-    res.status(500).json({ error: 'Failed to register user' });
+    res.render('register', {
+      title: 'Register',
+      error: 'Failed to register user. Please try again.'
+    });
   }
 });
 
@@ -33,18 +42,27 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({ error: true, message: 'Request body incomplete, both email and password are required' });
+    return res.render('login', {
+      title: 'Login',
+      error: 'Both email and password are required.'
+    });
   }
 
   try {
     const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     if (user.rows.length === 0) {
-      return res.status(401).json({ error: true, message: 'Incorrect email or password' });
+      return res.render('login', {
+        title: 'Login',
+        error: 'Incorrect email or password.'
+      });
     }
 
     const isMatch = await bcrypt.compare(password, user.rows[0].password_hash);
     if (!isMatch) {
-      return res.status(401).json({ error: true, message: 'Incorrect email or password' });
+      return res.render('login', {
+        title: 'Login',
+        error: 'Incorrect email or password.'
+      });
     }
 
     // Generate JWT using the centralized function
@@ -57,13 +75,16 @@ router.post('/login', async (req, res) => {
     res.redirect('/');
   } catch (err) {
     console.error('Error logging in user:', err);
-    res.status(500).json({ error: 'Failed to log in' });
+    res.render('login', {
+      title: 'Login',
+      error: 'Failed to log in. Please try again.'
+    });
   }
 });
 
 // Serve the registration form
 router.get('/register', (req, res) => {
-  res.render('register', { title: 'Register' });
+  res.render('register', { title: 'Register', error: null }); // Ensure error is defined
 });
 
 // Serve the login form
@@ -71,6 +92,7 @@ router.get('/login', (req, res) => {
   const errorMessage = req.query.error || null;  // Get error message from query parameter if it exists
   res.render('login', { title: 'Login', error: errorMessage });
 });
+
 
 // Admin User List (Protected Route)
 router.get('/list', ensureAuthenticated, ensureAdmin, async (req, res) => {
