@@ -3,14 +3,78 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const pool = require('./db');
 const { authenticateJWT, ensureAuthenticated, ensurePremiumOrAdmin, ensureAdmin } = require('./auth');
-
+const { Pool } = require('pg');
 // Load environment variables
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+
+// AWS SSM SDK
+const SSM = require('@aws-sdk/client-ssm'); 
+const parameterName = '/n11357428/traintrack/api-url';
+const ssmClient = new SSM.SSMClient({ region: 'ap-southeast-2' });
+
+//AWS Secrets Manager
+const { SecretsManagerClient, GetSecretValueCommand } = require('@aws-sdk/client-secrets-manager');
+
+const secretsClient = new SecretsManagerClient({ region: 'ap-southeast-2' });
+
+
+// Fetch the Parameter Store value (API URL)
+async function getParameter(parameterName) {
+    try {
+        const response = await ssmClient.send(new SSM.GetParameterCommand({ Name: parameterName }));
+        return response.Parameter.Value;
+    } catch (error) {
+        console.error('Error fetching parameter:', error);
+        return null;
+    }
+}
+
 const app = express();
 const port = process.env.PORT || 3000;
+
+let pool; 
+
+async function getSecrets() {
+    const secretName = "n11357428-traintrack-db-credentials";
+
+    try {
+        const response = await secretsClient.send(new GetSecretValueCommand({
+            SecretId: secretName,
+            VersionStage: "AWSCURRENT"
+        }));
+
+        if ('SecretString' in response) {
+            return JSON.parse(response.SecretString);
+        }
+    } catch (error) {
+        console.error('Error fetching secret:', error);
+        throw error;
+    }
+}
+
+// Initialize the database pool with secrets
+
+(async () => {
+    try {
+        const secrets = await getSecrets();
+        const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_DATABASE } = secrets;
+
+        pool = new Pool({
+            user: DB_USER,
+            host: DB_HOST,
+            database: DB_DATABASE,
+            password: DB_PASSWORD,
+            port: DB_PORT,
+        });
+        console.log('Database connected successfully!');
+    } catch (error) {
+        console.error('Failed to connect to database:', error);
+    }
+})();
+
+
 
 // Set up EJS as the template engine
 app.set('view engine', 'ejs');
@@ -41,6 +105,7 @@ app.use((req, res, next) => {
   next();
 });
 
+
 // Route imports
 const userRoutes = require('./routes/users');
 const modelRoutes = require('./routes/model');
@@ -52,11 +117,18 @@ app.use("/models", modelRoutes);
 app.use("/datasets", datasetRoutes);
 
 
+
 // Route for the home page
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   const errorMessage = req.query.error;
-  res.render('index', { title: 'Home', error: errorMessage });
+
+  // Fetch the API URL from the Parameter Store before rendering the page
+  const apiUrl = await getParameter(parameterName);
+  console.log('Fetched API URL:', apiUrl);
+
+  res.render('index', { title: 'Home', error: errorMessage, apiUrl });
 });
+
 
 // Catch-all route
 app.use((req, res) => {
