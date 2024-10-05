@@ -12,11 +12,20 @@ import matplotlib.pyplot as plt
 script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
-# Load the dataset paths
-train_dir = '../../datasets/3/train'  # Path to the training set
+# Load the dataset
+# Construct the absolute path for the dataset using script's location
+dataset_id = '58'  # Replace this with dynamic input if required
+train_dir = os.path.join(script_dir, '../../../../efs/datasets', dataset_id, 'train')  # Path to the training set
+train_csv_path = os.path.join(script_dir, '../../../../efs/datasets', dataset_id, 'Training_set.csv')
+
+# Check if the dataset paths exist
+if not os.path.exists(train_dir):
+    raise FileNotFoundError(f"Training directory not found at {train_dir}")
+
+if not os.path.exists(train_csv_path):
+    raise FileNotFoundError(f"Training CSV file not found at {train_csv_path}")
 
 # Load the training CSV file
-train_csv_path = '../../datasets/3/Training_set.csv'
 train_labels = pd.read_csv(train_csv_path)
 
 # Create a dictionary to map filenames to their labels

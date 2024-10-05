@@ -27,10 +27,17 @@ async function getAllDatasets() {
     const result = await pool.query('SELECT id, info FROM datasets');
     return result.rows.map(row => {
       const datasetId = row.id;
-      const datasetPath = path.join('uploads/datasets', String(datasetId), 'cover.jpg');
-      const imageUrl = fs.existsSync(path.join(__dirname, '../', datasetPath))
-        ? `/${datasetPath}`
+
+      // Relative path from where your app.js is running inside the container
+      const datasetPath = path.join(__dirname, '../../efs/datasets', String(datasetId), 'cover.jpg');
+
+      // Check if the file exists
+      const imageUrl = fs.existsSync(datasetPath)
+        ? `/efs/datasets/${datasetId}/cover.jpg`  // URL path for the browser
         : '/img/default.jpg';
+
+      console.log('Dataset Path:', datasetPath);
+      console.log('Image URL:', imageUrl);
 
       return {
         id: datasetId,
@@ -45,13 +52,11 @@ async function getAllDatasets() {
   }
 }
 
-
 // Route to render the datasets page (View Only, accessible to all logged-in users)
 router.get('/', ensureAuthenticated, async (req, res) => {
   const datasets = await getAllDatasets();
   res.render('datasets', { title: 'Datasets', datasets });
 });
-
 
 // Route to get dataset info as JSON (View Only, accessible to all logged-in users)
 router.get('/:datasetId/info', ensureAuthenticated, async (req, res) => {
@@ -66,7 +71,7 @@ router.get('/:datasetId/info', ensureAuthenticated, async (req, res) => {
 
 // Function to delete dataset directory from the file system
 function deleteDatasetDirectory(datasetId) {
-  const datasetPath = path.join(__dirname, '../uploads/datasets', String(datasetId));
+  const datasetPath = path.join(__dirname, '../../efs/datasets', String(datasetId));
   if (fs.existsSync(datasetPath)) {
     fs.rmSync(datasetPath, { recursive: true, force: true });
   }
@@ -87,7 +92,6 @@ router.post('/:datasetId/delete', ensureAuthenticated, ensureAdmin, async (req, 
     res.status(500).json({ error: 'Failed to delete dataset' });
   }
 });
-
 
 // Set up multer with memory storage and file limits (Got help from GPT to implement this part)
 const storage = multer.memoryStorage();
@@ -126,7 +130,7 @@ router.post('/upload', ensureAuthenticated, ensurePremiumOrAdmin, upload, async 
 
     try {
         // Insert dataset info into the database and get the new ID
-        const relativePath = path.join('uploads/datasets', 'initial');
+        const relativePath = path.join(__dirname, '../../efs/datasets', 'initial');
         const insertQuery = `
             INSERT INTO datasets (path, file_path, info)
             VALUES ($1, $1, $2)
@@ -136,8 +140,8 @@ router.post('/upload', ensureAuthenticated, ensurePremiumOrAdmin, upload, async 
         const datasetId = insertResult.rows[0].id;
 
         // Create the new directory with the datasetId as its name using relative path
-        const datasetPath = path.join('uploads/datasets', String(datasetId));
-        const absoluteDatasetPath = path.join(__dirname, '../', datasetPath);
+        const datasetPath = path.join(__dirname, '../../efs/datasets', String(datasetId));
+        const absoluteDatasetPath = path.join(datasetPath);
         if (!fs.existsSync(absoluteDatasetPath)) {
             fs.mkdirSync(absoluteDatasetPath, { recursive: true });
         }

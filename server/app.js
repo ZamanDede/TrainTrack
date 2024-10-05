@@ -10,7 +10,7 @@ dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 
 // AWS SSM SDK
-const SSM = require('@aws-sdk/client-ssm'); 
+const SSM = require('@aws-sdk/client-ssm');
 const parameterName = '/n11357428/traintrack/api-url';
 const ssmClient = new SSM.SSMClient({ region: 'ap-southeast-2' });
 
@@ -34,7 +34,7 @@ async function getParameter(parameterName) {
 const app = express();
 const port = process.env.PORT || 3000;
 
-let pool; 
+let pool;
 
 async function getSecrets() {
     const secretName = "n11357428-traintrack-db-credentials";
@@ -87,8 +87,10 @@ app.use(cookieParser());
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../Client/public')));
-// Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/efs/datasets', express.static(path.join(__dirname, '../efs/datasets')));
+
+
 
 // Middleware to log requests
 app.use((req, res, next) => {

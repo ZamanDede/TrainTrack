@@ -4,6 +4,9 @@ node_modules/
 # Python virtual environments inside ml-models
 server/uploads/ml-models/venv/
 
+# EFS
+efs/datasets
+
 # Environment variables
 server/.env
 

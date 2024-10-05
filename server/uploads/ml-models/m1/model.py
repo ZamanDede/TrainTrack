@@ -11,7 +11,13 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
 # Load the dataset
-file_path = '../../datasets/2/games.csv'  # Adjusted path for 2 folders deep
+# Construct the absolute path for the dataset using script's location
+dataset_id = '57'  # Replace this with dynamic input if required
+file_path = os.path.join(script_dir, '../../../../efs/datasets', dataset_id, 'games.csv')
+
+if not os.path.exists(file_path):
+    raise FileNotFoundError(f"Dataset file not found at {file_path}")
+
 data = pd.read_csv(file_path)
 
 # Select relevant features
