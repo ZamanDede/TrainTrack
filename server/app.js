@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const { authenticateJWT, ensureAuthenticated, ensurePremiumOrAdmin, ensureAdmin } = require('./auth');
-const pool = require('./db');  // Import the pool from db.js
+const { Pool } = require('pg');
 // Load environment variables
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
@@ -30,6 +30,48 @@ async function getParameter(parameterName) {
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+
+let pool;
+
+// database credentials are retrieved from AWS Secrets Manager
+async function getSecrets() {
+    const secretName = "n11357428-traintrack-db-credentials";
+
+    try {
+        const response = await secretsClient.send(new GetSecretValueCommand({ // securely access datbase details stored in the secret  
+            SecretId: secretName,
+            VersionStage: "AWSCURRENT"
+        }));
+
+        if ('SecretString' in response) {
+            return JSON.parse(response.SecretString);
+        }
+    } catch (error) {
+        console.error('Error fetching secret:', error);
+        throw error;
+    }
+}
+
+// Initialize the database pool with secrets
+// WHere the secrets are used to set up the datbase connection pool
+(async () => {
+  try {
+      const secrets = await getSecrets();
+      const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_DATABASE } = secrets;
+
+      pool = new Pool({
+          user: DB_USER,
+          host: DB_HOST,
+          database: DB_DATABASE,
+          password: DB_PASSWORD,
+          port: DB_PORT,
+      });
+      console.log('Database connected successfully!');
+  } catch (error) {
+      console.error('Failed to connect to database:', error);
+  }
+})();
 
 // Set up EJS as the template engine
 app.set('view engine', 'ejs');
