@@ -1,0 +1,51 @@
+@import url('../global.css'); /* Link to the global CSS */
+
+/* Datasets Page Styles */
+
+/* Search and Sort Container */
+.row.mb-4 {
+    background-color: var(--secondary-color);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+/* Form Controls in Search and Sort */
+.form-control {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+}
+
+.form-control:focus {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 5px rgba(10, 171, 142, 0.5);
+}
+
+/* Search Button */
+.input-group-append .btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    color: var(--white-color);
+    padding: 10px 15px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+}
+
+.input-group-append .btn-primary:hover {
+    background-color: var(--accent-color);
+    color: var(--white-color);
+}
+
+/* Modal Styles */
+.modal-content {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--primary-color);
+}

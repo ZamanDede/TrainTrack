@@ -1,0 +1,98 @@
+/* Carousel Customization */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: none;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.carousel-indicators {
+    bottom: -1.5rem;
+    background-color: transparent;
+}
+
+.carousel-indicators li {
+    background-color: transparent;
+    border: 0.1rem solid var(--accent-color);
+}
+
+.carousel-item img {
+    border-radius: 0.5rem;
+}
+
+/* Section Styles */
+.model-info,
+.training-section,
+.metrics-section,
+.model-visuals {
+    background-color: var(--secondary-color);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.model-header {
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+pre {
+    background-color: var(--secondary-color);
+    color: var(--white-color);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+}
+
+.table-bordered th, .table-bordered td {
+    border-color: var(--primary-color);
+    padding: 1rem;
+}
+
+.training-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+.table-bordered {
+    border: 0.2rem solid var(--primary-color);
+}
+
+.table-bordered th, .table-bordered td {
+    border-color: var(--primary-color);
+    padding: 1rem;
+    color: var(--white-color);
+    background-color: transparent;
+}
+
+.table thead th {
+    border-bottom: 0.2rem solid var(--primary-color);
+    color: var(--white-color);
+}
+
+
+.inline-form {
+    display: inline-block;
+    width: 38%;
+}
+
+button {
+    width: 80%;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+button:hover {
+    background-color: var(--accent-color);
+}
+
+button:disabled {
+    background-color: var(--danger-color);
+}

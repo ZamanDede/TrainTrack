@@ -1,0 +1,120 @@
+<%- include('components/navbar') %>
+
+  <head>
+    <link rel="stylesheet" href="/css/pages/datasets.css">
+  </head>
+
+  <div class="container">
+    <h1>Datasets</h1>
+    <p>Explore the available datasets below.</p>
+
+    <!-- Search and Sort Controls -->
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <label for="searchField">Search in:</label>
+        <select id="searchField" class="form-control">
+          <option value="general">General</option>
+          <option value="heading">Heading</option>
+          <option value="author">Author</option>
+          <option value="description">Description</option>
+          <option value="size">Size</option>
+          <option value="taskType">Task Type</option>
+          <option value="dataFormat">Data Format</option>
+          <option value="license">License</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="searchInput">Search:</label>
+        <div class="input-group">
+          <input type="text" id="searchInput" class="form-control" placeholder="Enter search term">
+          <div class="input-group-append">
+            <button id="searchButton" class="btn btn-primary" type="button">Search</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <label for="sortBy">Sort By:</label>
+        <select id="sortBy" class="form-control">
+          <option value="headingAsc">Heading (A-Z)</option>
+          <option value="headingDesc">Heading (Z-A)</option>
+          <option value="authorAsc">Author (A-Z)</option>
+          <option value="authorDesc">Author (Z-A)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" id="datasetContainer">
+      <% datasets.forEach(dataset=> { %>
+        <% if (dataset.heading && dataset.author) { %>
+          <div class="col-md-4 position-relative dataset-card" data-heading="<%= dataset.heading %>"
+            data-author="<%= dataset.author %>" data-description="<%= dataset.description %>"
+            data-size="<%= dataset.dataset_size %>" data-tasktype="<%= dataset.task_type %>"
+            data-dataformat="<%= dataset.data_format %>" data-license="<%= dataset.license %>">
+            <%- include('components/card', { item: { heading: dataset.heading, author: dataset.author, task_type:
+              dataset.task_type, retrieval_link: dataset.retrieval_link, imageUrl: dataset.imageUrl
+              || '/img/default.jpg' } }) %>
+
+              <!-- Info Button -->
+              <button class="btn btn-info btn-sm position-absolute" style="top: 10px; left: 10px;" data-toggle="modal"
+                data-target="#infoModal<%= dataset.id %>">
+                Info
+              </button>
+
+              <!-- Info Modal -->
+              <div class="modal fade" id="infoModal<%= dataset.id %>" tabindex="-1" role="dialog"
+                aria-labelledby="infoModalLabel<%= dataset.id %>" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="infoModalLabel<%= dataset.id %>">Dataset Info</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p><strong>Heading:</strong>
+                        <%= dataset.heading %>
+                      </p>
+                      <p><strong>Author:</strong>
+                        <%= dataset.author %>
+                      </p>
+                      <p><strong>Description:</strong>
+                        <%= dataset.description %>
+                      </p>
+                      <p><strong>Size:</strong>
+                        <%= dataset.dataset_size %>
+                      </p>
+                      <p><strong>Task Type:</strong>
+                        <%= dataset.task_type %>
+                      </p>
+                      <p><strong>Data Format:</strong>
+                        <%= dataset.data_format %>
+                      </p>
+                      <p><strong>License:</strong>
+                        <%= dataset.license %>
+                      </p>
+                      <p><strong>DB ID:</strong>
+                        <%= dataset.id %>
+                      </p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <% if (user && user.userType==='admin' ) { %>
+                <form action="/datasets/<%= dataset.id %>/delete" method="POST" class="delete-form">
+                  <button type="submit" class="btn btn-danger btn-sm position-absolute" style="top: 10px; right: 10px;">
+                    &times;
+                  </button>
+                </form>
+                <% } %>
+          </div>
+          <% } %>
+            <% }); %>
+    </div>
+  </div>
+
+  <script src="/js/datasetPresentation.js"></script>
