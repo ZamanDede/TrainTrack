@@ -5,7 +5,7 @@ node_modules/
 server/uploads/ml-models/venv/
 
 # EFS
-efs/datasets
+efs
 
 # Environment variables
 server/.env

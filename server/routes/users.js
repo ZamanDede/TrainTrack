@@ -131,7 +131,7 @@ router.post('/login', (req, res) => {
       const idToken = result.AuthenticationResult.IdToken;
 
       // Set the token in an HTTP-only cookie
-      res.cookie('token', idToken, { httpOnly: true, secure: false }); // Set 'secure: true' if using HTTPS
+      res.cookie('token', idToken, { httpOnly: true, secure: true }); // Set 'secure: true' if using HTTPS
 
       // Redirect to the homepage or dashboard
       res.redirect('/');
